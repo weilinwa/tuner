@@ -58,7 +58,7 @@ def stop_vllm(numa_conf):
         docker_command2 = f"docker rm {container_name}"
         logging.debug(f"Stopping and removing container {container_name}")
         run_docker_cmd(docker_command1)
-        run_docker_cmd(docker_command2, is_exit=False)        
+        run_docker_cmd(docker_command2, is_exit=False)
 
     logging.info("Waiting for 15s after stopping and removing vllm containers")
     time.sleep(15)
@@ -101,9 +101,9 @@ def run_benchmark_iters(model, token_comb, containers_conf, qpc, iterations):
     for i in range(iterations):
         logging.info(f"Starting benchmark for - concurrency: {token_comb['concurrency']}, qpc: {qpc}, iteration: {i+1}")
         result_files.append(run_benchmark(model, token_comb, containers_conf, qpc, False, it=i+1))
-    
+
     return result_files
-    
+
 
 def launch_nginx(containers_conf):
     container_image = containers_conf['nginx']['image']
@@ -117,7 +117,7 @@ def launch_nginx(containers_conf):
 def launch_vllm(test, numa_conf, containers_conf):
     for i, n in enumerate(numa_conf):
         node = i
-        cpuset = n['cpubind'] 
+        cpuset = n['cpubind']
         mem =  n['membind']
         model_dir = f"{MODEL_DIR_BASE}"
         container_image = containers_conf['vllm']['image']
@@ -129,12 +129,12 @@ def launch_vllm(test, numa_conf, containers_conf):
         kv_cache = test['test_parameters']['kv_cache']
         node_cpus = n['node']
         compile_config = 3
-        OMP_ENV = "-e KMP_BLOCKTIME=1 -e KMP_TPAUSE=0 -e KMP_SETTINGS=0 -e KMP_FORKJOIN_BARRIER_PATTERN=dist,dist -e KMP_PLAIN_BARRIER_PATTERN=dist,dist " 
+        OMP_ENV = "-e KMP_BLOCKTIME=1 -e KMP_TPAUSE=0 -e KMP_SETTINGS=0 -e KMP_FORKJOIN_BARRIER_PATTERN=dist,dist -e KMP_PLAIN_BARRIER_PATTERN=dist,dist "
         OMP_ENV += f"-e KMP_REDUCTION_BARRIER_PATTERN=dist,dist -e VLLM_USE_V1=1 -e VLLM_CPU_OMP_THREADS_BIND={cpuset}"
 
 #        docker_command = f"docker run -d --rm {PROXY_ENV} -p {port}:8000 --cpuset-cpus={cpuset} --cpuset-mems={mem} -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} -e VLLM_CPU_KVCACHE_SPACE={kv_cache} -v {model_dir}:/root/.cache --name {container_name} --ipc=host {container_image} --trust-remote-code --device cpu --dtype {dtype} --tensor-parallel-size 1 --enforce-eager --served-model-name {served_model_name} --model {model}"
         docker_command = f"docker run -d --rm --privileged=True {PROXY_ENV} -p {port}:8000 --network vllm_nginx --cpuset-cpus={node_cpus} --cpuset-mems={mem} {OMP_ENV} -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} -e VLLM_CPU_KVCACHE_SPACE={kv_cache} -v {model_dir}:/root/.cache --name {container_name} --ipc=host {container_image} --trust-remote-code --device cpu --dtype {dtype} --tensor-parallel-size 1 --served-model-name {served_model_name} --model {model} -O{compile_config}"
-    
+
         run_docker_cmd(docker_command)
     logging.info("Waiting 60s for all VLLM containers to initialize")
     time.sleep(60)
@@ -143,7 +143,7 @@ def launch_vllm(test, numa_conf, containers_conf):
         ready = False
         port = 8000 + i + 1 if len(numa_conf) > 1 else 8000
         for _ in range(75):
-            try: 
+            try:
                 response = requests.get(f"http://localhost:{port}/version", timeout=2)
                 if response.status_code == 200:
                     logging.info("VLLM endpoints are available")
@@ -169,7 +169,7 @@ def prepare_tests(models_conf):
     for m in models_conf:
         results_dir = get_model_res_dir(m['model'])
         os.makedirs(results_dir)
-        e = {'model': m['model'], 
+        e = {'model': m['model'],
                 'dtype': m['dtype'],
                 'test_parameters': m['test_parameters']}
         tests.append(e)
@@ -182,7 +182,7 @@ def prepare_single_test(model, params):
     tests = []
     results_dir = get_model_res_dir(model)
     os.makedirs(results_dir)
-    e = {'model': model, 
+    e = {'model': model,
                 'dtype': tp['dtype'],
                 'test_parameters': tp['test_parameters']}
     tests.append(e)
@@ -204,7 +204,7 @@ def run_download(container_image):
     docker_command = f"docker run --rm {PROXY_ENV} -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} -v {pwd}/configs:/workspace/configs -v {model_dir}:/root/.cache {container_image}"
     run_docker_cmd(docker_command)
 
-    
+
 def get_json(fn):
     j = None
     try:
@@ -221,6 +221,8 @@ def get_configs(args):
     global PROXY_ENV
     numa_fn = f"configs/{args.platform}/numa.json"
     models_fn = f"configs/{args.platform}/models.json"
+    if args.embed:
+        models_fn = f"configs/{args.platform}/models_embed.json"
     containers_fn = f"configs/{args.platform}/containers.json"
 
     conf['numa'] = get_json(numa_fn)
@@ -239,13 +241,13 @@ def get_configs(args):
             conf['qpc'] = 20
         elif args.sweep:
             conf['qpc'] = 8
-    
+
     if args.no_proxy:
         PROXY_ENV = ''
         conf['proxy'] = False
     else:
         conf['proxy'] = True
-    
+
     if args.iterations:
         conf['iterations'] = args.iterations
     else:
@@ -263,7 +265,7 @@ def get_best_result(res_files, res_param, compare):
         best_res = compare(r[res_param], best_res)
         if best_res == r[res_param]:
             best_res_file = f
-    
+
     return get_json(best_res_file)
 
 
@@ -278,6 +280,16 @@ def benchmark(test, conf):
         token_comb['p90_ttft'] = results['p90_ttft_ms']
         token_comb['p90_tpot'] = results['p90_tpot_ms']
         token_comb['p90_itl'] = results['p90_itl_ms']
+        token_comb['p90_query_lat'] = results['p90_e2el_ms']
+        token_comb['p90_query_tput'] = results['request_throughput']
+
+def benchmark_embed(test, conf):
+    containers_conf = conf['containers']
+    qpc = conf['qpc']
+    token_combinations = test['test_parameters']['benchmark_tests']
+    for token_comb in token_combinations:
+        res_file = run_benchmark(test['model'], token_comb, containers_conf, qpc, False)
+        results = get_json(res_file)
         token_comb['p90_query_lat'] = results['p90_e2el_ms']
         token_comb['p90_query_tput'] = results['request_throughput']
 
@@ -304,8 +316,25 @@ def sweep(test, conf):
             else:
                 token_comb['concurrency'] += token_comb['concurrency_step']
 
+def sweep_embed(test, conf):
+    containers_conf = conf['containers']
+    qpc = conf['qpc']
+    token_combinations = test['test_parameters']['sweep_tests']
+    for token_comb in token_combinations:
+        kpi = True
+        token_comb['concurrency'] = token_comb['start_concurrency']
+        while kpi == True:
+            res_file = run_benchmark(test['model'], token_comb, containers_conf, qpc, False)
+            results = get_json(res_file)
+            if results['p90_e2el_ms'] > token_comb['e2el_kpi']:
+                kpi = False
+                token_comb['p90_query_lat'] = results['p90_e2el_ms']
+                token_comb['p90_query_tput'] = results['request_throughput']
+                break
+            else:
+                token_comb['concurrency'] += token_comb['concurrency_step']
 
-def main(args):    
+def main(args):
     #Read all configs
     conf = get_configs(args)
 
@@ -314,10 +343,10 @@ def main(args):
             if m['model'] == args.model:
                 logging.info(m)
                 sys.exit(0)
-    
+
     if not args.model and args.test_parameters:
         logging.error("Specify the model for test parameters")
-        sys.exit(1)    
+        sys.exit(1)
 
     if not args.model and args.launch_vllm:
         logging.error("Specify the model to launch vllm containers")
@@ -351,7 +380,11 @@ def main(args):
         if not args.no_launch_vllm:
             launch_vllm(test, conf['numa'], conf['containers'])
 
-        if args.benchmark:
+        if args.embed and args.sweep:
+            sweep_embed(test, conf)
+        elif args.embed and args.benchmark:
+            benchmark_embed(test, conf)
+        elif args.benchmark:
             benchmark(test, conf)
         elif args.sweep:
             sweep(test, conf)
@@ -365,10 +398,11 @@ def main(args):
         token_combinations = test['test_parameters']['benchmark_tests'] if args.benchmark else test['test_parameters']['sweep_tests']
         for token_comb in token_combinations:
             logging.info(f"    Inp tokens: {token_comb['inp_tokens']}, Op tokens: {token_comb['op_tokens']}, Concurrency: {token_comb['concurrency']}")
-            logging.info(f"      P90 token tput: {round(token_comb['p90_op_token_throughput'], 2)} tokens/sec")
-            logging.info(f"      P90 Time to First Token {round(token_comb['p90_ttft'], 2)} ms")
-            logging.info(f"      P90 Time per output token {round(token_comb['p90_tpot'], 2)} ms")
-            logging.info(f"      P90 Inter token latency {round(token_comb['p90_itl'], 2)} ms")
+            if not args.embed:
+                logging.info(f"      P90 token tput: {round(token_comb['p90_op_token_throughput'], 2)} tokens/sec")
+                logging.info(f"      P90 Time to First Token {round(token_comb['p90_ttft'], 2)} ms")
+                logging.info(f"      P90 Time per output token {round(token_comb['p90_tpot'], 2)} ms")
+                logging.info(f"      P90 Inter token latency {round(token_comb['p90_itl'], 2)} ms")
             logging.info(f"      P90 Query latency {round(token_comb['p90_query_lat'], 2)} ms")
             logging.info(f"      P90 Query throughput {round(token_comb['p90_query_tput'], 2)} queries/sec")
 
@@ -382,6 +416,7 @@ if __name__ == '__main__':
     parser.add_argument("-nl", "--no-launch-vllm", help="doesn't launch or stop vllm/nginx containers. Use this to run multiple tests on prior launched vllm", action="store_true")
     parser.add_argument("-m", "--model", type=str, help="Specify model (for single model execution). If -tp is not passed, display test parameters of the model and exit")
     parser.add_argument("-tp", "--test-parameters", type=str, help="Specify test parameters in json string format for the specified model")
+    parser.add_argument("-e", "--embed", help="run embedding model tests", action="store_true")
     group1 = parser.add_mutually_exclusive_group(required=True)
     group1.add_argument("-b", "--benchmark", help="start benchmark run", action="store_true")
     group1.add_argument("-s", "--sweep", help="start sweeper run", action="store_true")
