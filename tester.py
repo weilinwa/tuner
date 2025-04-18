@@ -10,7 +10,8 @@ import requests
 import argparse
 
 
-MODEL_DIR_BASE = os.getcwd()+"/models"
+#MODEL_DIR_BASE = os.getcwd()+"/models"
+MODEL_DIR_BASE = "/home/weilinwa/.cache"
 NGINX_DIR_BASE = os.getcwd()+"/nginx"
 RESULTS_DIR_BASE = os.getcwd()+"/results/result_"+str(int(time.time()))
 SERVED_MODEL_NAME = "model_in_test"
@@ -91,7 +92,7 @@ def run_benchmark(model, token_comb, containers_conf, qpc, is_warmup, it=1):
     if is_warmup:
         docker_command = f"docker run -it --cpuset-cpus={cpus} --rm --net=host {PROXY_ENV} -v {model_dir}:/root/.cache -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} --entrypoint=python3 {container_image} /workspace/vllm/benchmarks/benchmark_serving.py --port 8000 --dataset-name random --request-rate {concurrency} --num-prompts {num_prompts} --random-input-len {inp_tokens} --random-output-len {op_tokens} --ignore-eos --percentile-metrics ttft,tpot,itl,e2el --served-model-name {served_model_name} --metric-percentiles 50,90,99 --max-concurrency {concurrency} --model {model}"
     else:
-        docker_command = f"docker run -it --cpuset-cpus={cpus} --rm --net=host {PROXY_ENV} -v {model_dir}:/root/.cache -v {results_dir}:/results -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} --entrypoint=python3 {conggtainer_image} /workspace/vllm/benchmarks/benchmark_serving.py --port 8000 --dataset-name random --request-rate {concurrency} --num-prompts {num_prompts} --random-input-len {inp_tokens} --random-output-len {op_tokens} --ignore-eos --percentile-metrics ttft,tpot,itl,e2el --served-model-name {served_model_name} --metric-percentiles 50,90,99 --max-concurrency {concurrency} --save-result --result-filename {results_file_container} --model {model}"
+        docker_command = f"docker run -it --cpuset-cpus={cpus} --rm --net=host {PROXY_ENV} -v {model_dir}:/root/.cache -v {results_dir}:/results -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} --entrypoint=python3 {container_image} /workspace/vllm/benchmarks/benchmark_serving.py --port 8000 --dataset-name random --request-rate {concurrency} --num-prompts {num_prompts} --random-input-len {inp_tokens} --random-output-len {op_tokens} --ignore-eos --percentile-metrics ttft,tpot,itl,e2el --served-model-name {served_model_name} --metric-percentiles 50,90,99 --max-concurrency {concurrency} --save-result --result-filename {results_file_container} --model {model}"
 
     run_docker_cmd(docker_command)
     return results_file_host
@@ -114,9 +115,9 @@ def run_benchmark_embed(model, token_comb, containers_conf, qpc, is_warmup):
     docker_command = ""
 
     if is_warmup:
-        docker_command = f"docker run -it --cpuset-cpus={cpus} --rm --net=host {PROXY_ENV} -v {BENCHMARK_DIR_BASE}/benchmark_serving_embedding.py:/workspace/vllm/benchmarks/benchmark_serving_embedding.py -v {BENCHMARK_DIR_BASE}/backend_request_func.py:/workspace/vllm/benchmarks/backend_request_func.py -v {model_dir}:/root/.cache -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} --entrypoint=python3 {container_image} /workspace/vllm/benchmarks/benchmark_serving.py --port 8000 --dataset-name random --request-rate {concurrency} --num-prompts {num_prompts} --random-input-len {inp_tokens} --random-output-len {op_tokens} --ignore-eos --percentile-metrics ttft,tpot,itl,e2el --served-model-name {served_model_name} --metric-percentiles 50,90,99 --max-concurrency {concurrency} --model {model}"
+        docker_command = f"docker run -it --cpuset-cpus={cpus} --rm --net=host {PROXY_ENV} -v {BENCHMARK_DIR_BASE}/benchmark_serving_embedding.py:/workspace/vllm/benchmarks/benchmark_serving_embedding.py -v {BENCHMARK_DIR_BASE}/backend_request_func.py:/workspace/vllm/benchmarks/backend_request_func.py -v {model_dir}:/root/.cache -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} --entrypoint=python3 {container_image} /workspace/vllm/benchmarks/benchmark_serving_embedding.py --port 8000 --backend vllm-embed --endpoint /v1/embeddings --dataset-name random --request-rate {concurrency} --num-prompts {num_prompts} --random-input-len {inp_tokens} --random-output-len {inp_tokens} --ignore-eos --percentile-metrics ttft,tpot,itl,e2el --served-model-name {served_model_name} --metric-percentiles 50,90,99 --max-concurrency {concurrency} --model {model}"
     else:
-        docker_command = f"docker run -it --cpuset-cpus={cpus} --rm --net=host {PROXY_ENV} -v {BENCHMARK_DIR_BASE}/benchmark_serving_embedding.py:/workspace/vllm/benchmarks/benchmark_serving_embedding.py -v {BENCHMARK_DIR_BASE}/backend_request_func.py:/workspace/vllm/benchmarks/backend_request_func.py -v {model_dir}:/root/.cache -v {results_dir}:/results -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} --entrypoint=python3 {container_image} /workspace/vllm/benchmarks/benchmark_serving.py --port 8000 --dataset-name random --request-rate {concurrency} --num-prompts {num_prompts} --random-input-len {inp_tokens} --random-output-len {op_tokens} --ignore-eos --percentile-metrics ttft,tpot,itl,e2el --served-model-name {served_model_name} --metric-percentiles 50,90,99 --max-concurrency {concurrency} --save-result --result-filename {results_file_container} --model {model}"
+        docker_command = f"docker run -it --cpuset-cpus={cpus} --rm --net=host {PROXY_ENV} -v {BENCHMARK_DIR_BASE}/benchmark_serving_embedding.py:/workspace/vllm/benchmarks/benchmark_serving_embedding.py -v {BENCHMARK_DIR_BASE}/backend_request_func.py:/workspace/vllm/benchmarks/backend_request_func.py -v {model_dir}:/root/.cache -v {results_dir}:/results -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} --entrypoint=python3 {container_image} /workspace/vllm/benchmarks/benchmark_serving_embedding.py --port 8000 --backend vllm-embed --endpoint /v1/embeddings --dataset-name random --request-rate {concurrency} --num-prompts {num_prompts} --random-input-len {inp_tokens} --random-output-len {inp_tokens} --ignore-eos --percentile-metrics ttft,tpot,itl,e2el --served-model-name {served_model_name} --metric-percentiles 50,90,99 --max-concurrency {concurrency} --save-result --result-filename {results_file_container} --model {model}"
 
     run_docker_cmd(docker_command)
     return results_file_host
@@ -156,7 +157,7 @@ def launch_vllm(test, numa_conf, containers_conf, embed=False):
         node_cpus = n['node']
         compile_config = 3
         OMP_ENV = "-e KMP_BLOCKTIME=1 -e KMP_TPAUSE=0 -e KMP_SETTINGS=0 -e KMP_FORKJOIN_BARRIER_PATTERN=dist,dist -e KMP_PLAIN_BARRIER_PATTERN=dist,dist "
-        OMP_ENV += f"-e KMP_REDUCTION_BARRIER_PATTERN=dist,dist -e VLLM_USE_V1=1 -e VLLM_CPU_OMP_THREADS_BIND={cpuset}"
+        OMP_ENV += f"-e KMP_REDUCTION_BARRIER_PATTERN=dist,dist -e VLLM_V1_USE=1 -e VLLM_CPU_OMP_THREADS_BIND={cpuset}"
 
 #        docker_command = f"docker run -d --rm {PROXY_ENV} -p {port}:8000 --cpuset-cpus={cpuset} --cpuset-mems={mem} -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} -e VLLM_CPU_KVCACHE_SPACE={kv_cache} -v {model_dir}:/root/.cache --name {container_name} --ipc=host {container_image} --trust-remote-code --device cpu --dtype {dtype} --tensor-parallel-size 1 --enforce-eager --served-model-name {served_model_name} --model {model}"
         docker_command = f"docker run -d --rm --privileged=True {PROXY_ENV} -p {port}:8000 --network vllm_nginx --cpuset-cpus={node_cpus} --cpuset-mems={mem} {OMP_ENV} -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} -e VLLM_CPU_KVCACHE_SPACE={kv_cache} -v {model_dir}:/root/.cache --name {container_name} --ipc=host {container_image} --trust-remote-code --device cpu --dtype {dtype} --tensor-parallel-size 1 --served-model-name {served_model_name} --model {model} -O{compile_config}"
@@ -317,7 +318,7 @@ def benchmark_embed(test, conf):
     qpc = conf['qpc']
     token_combinations = test['test_parameters']['benchmark_tests']
     for token_comb in token_combinations:
-        res_file = run_benchmark(test['model'], token_comb, containers_conf, qpc, False)
+        res_file = run_benchmark_embed(test['model'], token_comb, containers_conf, qpc, False)
         results = get_json(res_file)
         token_comb['p90_query_lat'] = results['p90_e2el_ms']
         token_comb['p90_query_tput'] = results['request_throughput']
@@ -353,7 +354,7 @@ def sweep_embed(test, conf):
         kpi = True
         token_comb['concurrency'] = token_comb['start_concurrency']
         while kpi == True:
-            res_file = run_benchmark(test['model'], token_comb, containers_conf, qpc, False)
+            res_file = run_benchmark_embed(test['model'], token_comb, containers_conf, qpc, False)
             results = get_json(res_file)
             if results['p90_e2el_ms'] > token_comb['e2el_kpi']:
                 kpi = False
@@ -426,12 +427,15 @@ def main(args):
         logging.info(f"  Model: {test['model']}")
         token_combinations = test['test_parameters']['benchmark_tests'] if args.benchmark else test['test_parameters']['sweep_tests']
         for token_comb in token_combinations:
-            logging.info(f"    Inp tokens: {token_comb['inp_tokens']}, Op tokens: {token_comb['op_tokens']}, Concurrency: {token_comb['concurrency']}")
             if not args.embed:
+                logging.info(f"    Inp tokens: {token_comb['inp_tokens']}, Op tokens: {token_comb['op_tokens']}, Concurrency: {token_comb['concurrency']}")
                 logging.info(f"      P90 token tput: {round(token_comb['p90_op_token_throughput'], 2)} tokens/sec")
                 logging.info(f"      P90 Time to First Token {round(token_comb['p90_ttft'], 2)} ms")
                 logging.info(f"      P90 Time per output token {round(token_comb['p90_tpot'], 2)} ms")
                 logging.info(f"      P90 Inter token latency {round(token_comb['p90_itl'], 2)} ms")
+            else:
+                logging.info(f"    Inp tokens: {token_comb['inp_tokens']}, Concurrency: {token_comb['concurrency']}")
+
             logging.info(f"      P90 Query latency {round(token_comb['p90_query_lat'], 2)} ms")
             logging.info(f"      P90 Query throughput {round(token_comb['p90_query_tput'], 2)} queries/sec")
 
