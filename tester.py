@@ -16,6 +16,7 @@ RESULTS_DIR_BASE = os.getcwd()+"/results/result_"+str(int(time.time()))
 SERVED_MODEL_NAME = "model_in_test"
 HUGGING_FACE_HUB_TOKEN = os.environ.get('HUGGING_FACE_HUB_TOKEN', "")
 PROXY_ENV = f"-e HTTP_PROXY={os.environ.get('HTTP_PROXY', '')} -e HTTPS_PROXY={os.environ.get('HTTPS_PROXY', '')} -e NO_PROXY={os.environ.get('NO_PROXY', '')}"
+BENCHMARK_DIR_BASE=os.getcwd()
 
 logging.basicConfig(
         level=logging.DEBUG,
@@ -90,7 +91,32 @@ def run_benchmark(model, token_comb, containers_conf, qpc, is_warmup, it=1):
     if is_warmup:
         docker_command = f"docker run -it --cpuset-cpus={cpus} --rm --net=host {PROXY_ENV} -v {model_dir}:/root/.cache -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} --entrypoint=python3 {container_image} /workspace/vllm/benchmarks/benchmark_serving.py --port 8000 --dataset-name random --request-rate {concurrency} --num-prompts {num_prompts} --random-input-len {inp_tokens} --random-output-len {op_tokens} --ignore-eos --percentile-metrics ttft,tpot,itl,e2el --served-model-name {served_model_name} --metric-percentiles 50,90,99 --max-concurrency {concurrency} --model {model}"
     else:
-        docker_command = f"docker run -it --cpuset-cpus={cpus} --rm --net=host {PROXY_ENV} -v {model_dir}:/root/.cache -v {results_dir}:/results -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} --entrypoint=python3 {container_image} /workspace/vllm/benchmarks/benchmark_serving.py --port 8000 --dataset-name random --request-rate {concurrency} --num-prompts {num_prompts} --random-input-len {inp_tokens} --random-output-len {op_tokens} --ignore-eos --percentile-metrics ttft,tpot,itl,e2el --served-model-name {served_model_name} --metric-percentiles 50,90,99 --max-concurrency {concurrency} --save-result --result-filename {results_file_container} --model {model}"
+        docker_command = f"docker run -it --cpuset-cpus={cpus} --rm --net=host {PROXY_ENV} -v {model_dir}:/root/.cache -v {results_dir}:/results -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} --entrypoint=python3 {conggtainer_image} /workspace/vllm/benchmarks/benchmark_serving.py --port 8000 --dataset-name random --request-rate {concurrency} --num-prompts {num_prompts} --random-input-len {inp_tokens} --random-output-len {op_tokens} --ignore-eos --percentile-metrics ttft,tpot,itl,e2el --served-model-name {served_model_name} --metric-percentiles 50,90,99 --max-concurrency {concurrency} --save-result --result-filename {results_file_container} --model {model}"
+
+    run_docker_cmd(docker_command)
+    return results_file_host
+
+def run_benchmark_embed(model, token_comb, containers_conf, qpc, is_warmup):
+    container_image = containers_conf['benchmark']['image']
+    cpus = containers_conf['benchmark']['cpuset']
+    concurrency = token_comb['concurrency']
+    inp_tokens = token_comb['inp_tokens']
+    served_model_name = SERVED_MODEL_NAME
+    num_prompts = concurrency * qpc
+    model_dir = f"{MODEL_DIR_BASE}"
+    results_dir = get_model_res_dir(model) + f"/I{inp_tokens}"
+    if not os.path.exists(results_dir):
+        os.makedirs(results_dir)
+    results_file = f"result-C{concurrency}.json"
+    results_file_container = f"/results/{results_file}"
+    results_file_host = f"{results_dir}/{results_file}"
+
+    docker_command = ""
+
+    if is_warmup:
+        docker_command = f"docker run -it --cpuset-cpus={cpus} --rm --net=host {PROXY_ENV} -v {BENCHMARK_DIR_BASE}/benchmark_serving_embedding.py:/workspace/vllm/benchmarks/benchmark_serving_embedding.py -v {BENCHMARK_DIR_BASE}/backend_request_func.py:/workspace/vllm/benchmarks/backend_request_func.py -v {model_dir}:/root/.cache -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} --entrypoint=python3 {container_image} /workspace/vllm/benchmarks/benchmark_serving.py --port 8000 --dataset-name random --request-rate {concurrency} --num-prompts {num_prompts} --random-input-len {inp_tokens} --random-output-len {op_tokens} --ignore-eos --percentile-metrics ttft,tpot,itl,e2el --served-model-name {served_model_name} --metric-percentiles 50,90,99 --max-concurrency {concurrency} --model {model}"
+    else:
+        docker_command = f"docker run -it --cpuset-cpus={cpus} --rm --net=host {PROXY_ENV} -v {BENCHMARK_DIR_BASE}/benchmark_serving_embedding.py:/workspace/vllm/benchmarks/benchmark_serving_embedding.py -v {BENCHMARK_DIR_BASE}/backend_request_func.py:/workspace/vllm/benchmarks/backend_request_func.py -v {model_dir}:/root/.cache -v {results_dir}:/results -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} --entrypoint=python3 {container_image} /workspace/vllm/benchmarks/benchmark_serving.py --port 8000 --dataset-name random --request-rate {concurrency} --num-prompts {num_prompts} --random-input-len {inp_tokens} --random-output-len {op_tokens} --ignore-eos --percentile-metrics ttft,tpot,itl,e2el --served-model-name {served_model_name} --metric-percentiles 50,90,99 --max-concurrency {concurrency} --save-result --result-filename {results_file_container} --model {model}"
 
     run_docker_cmd(docker_command)
     return results_file_host
@@ -114,7 +140,7 @@ def launch_nginx(containers_conf):
     time.sleep(2)
 
 
-def launch_vllm(test, numa_conf, containers_conf):
+def launch_vllm(test, numa_conf, containers_conf, embed=False):
     for i, n in enumerate(numa_conf):
         node = i
         cpuset = n['cpubind']
@@ -160,7 +186,10 @@ def launch_vllm(test, numa_conf, containers_conf):
     launch_nginx(containers_conf)
 
     #Warmup run
-    run_benchmark(test['model'], {'inp_tokens': 128, 'op_tokens': 128, 'concurrency': 2}, containers_conf, 1, True)
+    if embed:
+        run_benchmark_embed(test['model'], {'inp_tokens': 128, 'op_tokens': 128, 'concurrency': 2}, containers_conf, 1, True)
+    else:
+        run_benchmark(test['model'], {'inp_tokens': 128, 'op_tokens': 128, 'concurrency': 2}, containers_conf, 1, True)
 
 
 def prepare_tests(models_conf):
@@ -361,7 +390,7 @@ def main(args):
         if mp == None:
             logging.error("specified model {args.model} not found in {args.platform}/models.json")
             sys.exit(1)
-        launch_vllm(mp, conf['numa'], conf['containers'])
+        launch_vllm(mp, conf['numa'], conf['containers'], embed=args.embed)
         logging.info("Done launching vllm containers")
         sys.exit(0)
 
@@ -378,7 +407,7 @@ def main(args):
     for test in tests:
         #Launch vllm server for first model (mount models dir and result dir for profile)
         if not args.no_launch_vllm:
-            launch_vllm(test, conf['numa'], conf['containers'])
+            launch_vllm(test, conf['numa'], conf['containers'], embed=args.embed)
 
         if args.embed and args.sweep:
             sweep_embed(test, conf)
