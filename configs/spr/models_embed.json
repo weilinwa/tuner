@@ -1,0 +1,28 @@
+[
+	{
+	"model": "intfloat/multilingual-e5-large-instruct",
+	"dtype": "bfloat16",
+	"test_parameters": {
+		"max_tokens": 514,
+		"embedding_dimension": 1024,
+		"num_parameters": "560M",
+		"mem_usage(MB)": 1068,
+		"mteb_rank": 4,
+		"kv_cache": 0,
+		"sweep_tests":[
+			{
+				"e2el_kpi": 200,
+				"start_concurrency": 32,
+				"concurrency_step": 8,
+        "inp_tokens": 128
+			},
+			{
+				"e2el_kpi": 200,
+				"start_concurrency": 16,
+				"concurrency_step": 8,
+        "inp_tokens": 510
+			}
+		]
+	}
+}
+]
