@@ -10,8 +10,7 @@ import requests
 import argparse
 
 
-#MODEL_DIR_BASE = os.getcwd()+"/models"
-MODEL_DIR_BASE = "/home/weilinwa/.cache"
+MODEL_DIR_BASE = os.getcwd()+"/models"
 NGINX_DIR_BASE = os.getcwd()+"/nginx"
 RESULTS_DIR_BASE = os.getcwd()+"/results/result_"+str(int(time.time()))
 SERVED_MODEL_NAME = "model_in_test"
@@ -188,7 +187,7 @@ def launch_vllm(test, numa_conf, containers_conf, embed=False):
 
     #Warmup run
     if embed:
-        run_benchmark_embed(test['model'], {'inp_tokens': 128, 'op_tokens': 128, 'concurrency': 2}, containers_conf, 1, True)
+        run_benchmark_embed(test['model'], {'inp_tokens': 128, 'op_tokens': 128, 'concurrency': 32}, containers_conf, 8, True)
     else:
         run_benchmark(test['model'], {'inp_tokens': 128, 'op_tokens': 128, 'concurrency': 2}, containers_conf, 1, True)
 
@@ -242,8 +241,8 @@ def get_json(fn):
             j = json.load(f)
     except Exception as e:
         logging.error(f"Opening file {fn} failed with exception {e}", exc_info=True)
-        sys.exit(1)
-    return j
+        #sys.exit(1)
+    return j or {}
 
 
 def get_configs(args):
@@ -356,7 +355,9 @@ def sweep_embed(test, conf):
         while kpi == True:
             res_file = run_benchmark_embed(test['model'], token_comb, containers_conf, qpc, False)
             results = get_json(res_file)
-            if results['p90_e2el_ms'] > token_comb['e2el_kpi']:
+            if 'p90_e2el_ms' not in results:
+                kpi = False
+            elif results['p90_e2el_ms'] > token_comb['e2el_kpi']:
                 kpi = False
                 token_comb['p90_query_lat'] = results['p90_e2el_ms']
                 token_comb['p90_query_tput'] = results['request_throughput']
