@@ -14,13 +14,19 @@
 				"e2el_kpi": 100,
 				"start_concurrency": 64,
 				"concurrency_step": 8,
-        "inp_tokens": 128
+				"inp_tokens": 128
 			},
 			{
 				"e2el_kpi": 100,
 				"start_concurrency": 32,
 				"concurrency_step": 8,
-        "inp_tokens": 256
+				"inp_tokens": 256
+			},
+			{
+				"e2el_kpi": 100,
+				"start_concurrency": 8,
+				"concurrency_step": 8,
+				"inp_tokens": 512
 			}
 		]
 	}
@@ -40,13 +46,19 @@
 				"e2el_kpi": 1200,
 				"start_concurrency": 8,
 				"concurrency_step": 8,
-        "inp_tokens": 128
+				"inp_tokens": 128
 			},
 			{
-				"e2el_kpi": 1200,
+				"e2el_kpi": 1500,
 				"start_concurrency": 8,
 				"concurrency_step": 8,
-        "inp_tokens": 256
+				"inp_tokens": 256
+			},
+			{
+				"e2el_kpi": 1500,
+				"start_concurrency": 8,
+				"concurrency_step": 8,
+				"inp_tokens": 512
 			}
 		]
 	}
@@ -66,13 +78,19 @@
 				"e2el_kpi": 100,
 				"start_concurrency": 64,
 				"concurrency_step": 8,
-        "inp_tokens": 128
+				"inp_tokens": 128
 			},
 			{
 				"e2el_kpi": 100,
-				"start_concurrency": 32,
+				"start_concurrency": 16,
 				"concurrency_step": 8,
-        "inp_tokens": 256
+				"inp_tokens": 256
+			},
+			{
+				"e2el_kpi": 100,
+				"start_concurrency": 8,
+				"concurrency_step": 8,
+				"inp_tokens": 512
 			}
 		]
 	}
@@ -92,13 +110,19 @@
 				"e2el_kpi": 100,
 				"start_concurrency": 64,
 				"concurrency_step": 8,
-        "inp_tokens": 128
+				"inp_tokens": 128
 			},
 			{
 				"e2el_kpi": 100,
 				"start_concurrency": 32,
 				"concurrency_step": 8,
-        "inp_tokens": 256
+				"inp_tokens": 256
+			},
+			{
+				"e2el_kpi": 100,
+				"start_concurrency": 8,
+				"concurrency_step": 8,
+				"inp_tokens": 512
 			}
 		]
 	}
@@ -116,15 +140,21 @@
 		"sweep_tests":[
 			{
 				"e2el_kpi": 100,
-				"start_concurrency": 64,
+				"start_concurrency": 368,
 				"concurrency_step": 8,
-        "inp_tokens": 128
+				"inp_tokens": 128
 			},
 			{
 				"e2el_kpi": 100,
-				"start_concurrency": 32,
+				"start_concurrency": 152,
 				"concurrency_step": 8,
-        "inp_tokens": 256
+				"inp_tokens": 256
+			},
+			{
+				"e2el_kpi": 100,
+				"start_concurrency": 64,
+				"concurrency_step": 8,
+				"inp_tokens": 512
 			}
 		]
 	}
@@ -142,15 +172,21 @@
 		"sweep_tests":[
 			{
 				"e2el_kpi": 100,
-				"start_concurrency": 128,
+				"start_concurrency": 800,
 				"concurrency_step": 8,
-        "inp_tokens": 128
+				"inp_tokens": 128
 			},
 			{
 				"e2el_kpi": 100,
-				"start_concurrency": 64,
+				"start_concurrency": 384,
 				"concurrency_step": 8,
-        "inp_tokens": 256
+				"inp_tokens": 256
+			},
+			{
+				"e2el_kpi": 100,
+				"start_concurrency": 200,
+				"concurrency_step": 8,
+				"inp_tokens": 512
 			}
 		]
 	}
@@ -167,16 +203,22 @@
 		"kv_cache": 0,
 		"sweep_tests":[
 			{
-				"e2el_kpi": 100,
+				"e2el_kpi": 10,
 				"start_concurrency": 128,
 				"concurrency_step": 8,
-        "inp_tokens": 128
+				"inp_tokens": 128
 			},
 			{
-				"e2el_kpi": 100,
+				"e2el_kpi": 10,
 				"start_concurrency": 64,
 				"concurrency_step": 8,
-        "inp_tokens": 256
+				"inp_tokens": 256
+			},
+			{
+				"e2el_kpi": 10,
+				"start_concurrency": 8,
+				"concurrency_step": 8,
+				"inp_tokens": 512
 			}
 		]
 	}
