@@ -439,7 +439,7 @@ async def async_request_openai_embedding(
                 if request_func_input.model_name else request_func_input.model,
             "input": request_func_input.prompt,
             #"temperature": 0.0,
-            #"max_tokens": request_func_input.output_len,
+            "truncate_prompt_tokens": request_func_input.output_len,
             #"logprobs": request_func_input.logprobs,
             "stream": True,
             "stream_options": {
