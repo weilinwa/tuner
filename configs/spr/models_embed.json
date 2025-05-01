@@ -1,226 +1,324 @@
 [
-	{
-	"model": "intfloat/multilingual-e5-large-instruct",
-	"dtype": "bfloat16",
-	"test_parameters": {
-		"max_tokens": 514,
-		"embedding_dimension": 1024,
-		"num_parameters": "560M",
-		"mem_usage(MB)": 1068,
-		"mteb_rank": 4,
-		"kv_cache": 0,
-		"sweep_tests":[
-			{
-				"e2el_kpi": 100,
-				"start_concurrency": 64,
-				"concurrency_step": 8,
-				"inp_tokens": 128
-			},
-			{
-				"e2el_kpi": 100,
-				"start_concurrency": 32,
-				"concurrency_step": 8,
-				"inp_tokens": 256
-			},
-			{
-				"e2el_kpi": 100,
-				"start_concurrency": 8,
-				"concurrency_step": 8,
-				"inp_tokens": 512
-			}
-		]
-	}
+    {
+    "model": "intfloat/multilingual-e5-large-instruct",
+    "dtype": "bfloat16",
+    "test_parameters": {
+        "max_tokens": 514,
+        "embedding_dimension": 1024,
+        "num_parameters": "560M",
+        "mem_usage(MB)": 1068,
+        "mteb_rank": 4,
+        "kv_cache": 0,
+        "sweep_tests":[
+            {
+                "e2el_kpi": 100,
+                "start_concurrency": 64,
+                "concurrency_step": 8,
+                "inp_tokens": 128
+            },
+            {
+                "e2el_kpi": 100,
+                "start_concurrency": 32,
+                "concurrency_step": 8,
+                "inp_tokens": 256
+            },
+            {
+                "e2el_kpi": 100,
+                "start_concurrency": 8,
+                "concurrency_step": 8,
+                "inp_tokens": 512
+            }
+        ],
+        "benchmark_tests": [
+            {
+                "inp_tokens": 128,
+                "concurrency": 104
+            },
+            {
+                "inp_tokens": 256,
+                "concurrency": 40
+            },
+            {
+                "inp_tokens": 512,
+                "concurrency": 16
+            }
+        ]
+    }
 },
 {
-	"model": "Linq-AI-Research/Linq-Embed-Mistral",
-	"dtype": "bfloat16",
-	"test_parameters": {
-		"max_tokens": 32768,
-		"embedding_dimension": 4096,
-		"num_parameters": "7B",
-		"mem_usage": 13563,
-		"mteb_rank": 2,
-		"kv_cache": 0,
-		"sweep_tests":[
-			{
-				"e2el_kpi": 1200,
-				"start_concurrency": 8,
-				"concurrency_step": 8,
-				"inp_tokens": 128
-			},
-			{
-				"e2el_kpi": 1500,
-				"start_concurrency": 8,
-				"concurrency_step": 8,
-				"inp_tokens": 256
-			},
-			{
-				"e2el_kpi": 1500,
-				"start_concurrency": 8,
-				"concurrency_step": 8,
-				"inp_tokens": 512
-			}
-		]
-	}
+    "model": "Linq-AI-Research/Linq-Embed-Mistral",
+    "dtype": "bfloat16",
+    "test_parameters": {
+        "max_tokens": 32768,
+        "embedding_dimension": 4096,
+        "num_parameters": "7B",
+        "mem_usage": 13563,
+        "mteb_rank": 2,
+        "kv_cache": 0,
+        "sweep_tests":[
+            {
+                "e2el_kpi": 1200,
+                "start_concurrency": 8,
+                "concurrency_step": 8,
+                "inp_tokens": 128
+            },
+            {
+                "e2el_kpi": 1500,
+                "start_concurrency": 8,
+                "concurrency_step": 8,
+                "inp_tokens": 256
+            },
+            {
+                "e2el_kpi": 1500,
+                "start_concurrency": 8,
+                "concurrency_step": 8,
+                "inp_tokens": 512
+            }
+        ],
+        "benchmark_tests": [
+            {
+                "inp_tokens": 128,
+                "concurrency": 24
+            },
+            {
+                "inp_tokens": 256,
+                "concurrency": 16
+            },
+            {
+                "inp_tokens": 512,
+                "concurrency": 8
+            }
+        ]
+    }
 },
 {
-	"model": "HIT-TMG/KaLM-embedding-multilingual-mini-v1",
-	"dtype": "bfloat16",
-	"test_parameters": {
-		"max_tokens": 512,
-		"embedding_dimension": 896,
-		"num_parameters": "494M",
-		"mem_usage(MB)": 1885,
-		"mteb_rank": 19,
-		"kv_cache": 0,
-		"sweep_tests":[
-			{
-				"e2el_kpi": 100,
-				"start_concurrency": 64,
-				"concurrency_step": 8,
-				"inp_tokens": 128
-			},
-			{
-				"e2el_kpi": 100,
-				"start_concurrency": 16,
-				"concurrency_step": 8,
-				"inp_tokens": 256
-			},
-			{
-				"e2el_kpi": 100,
-				"start_concurrency": 8,
-				"concurrency_step": 8,
-				"inp_tokens": 512
-			}
-		]
-	}
+    "model": "HIT-TMG/KaLM-embedding-multilingual-mini-v1",
+    "dtype": "bfloat16",
+    "test_parameters": {
+        "max_tokens": 512,
+        "embedding_dimension": 896,
+        "num_parameters": "494M",
+        "mem_usage(MB)": 1885,
+        "mteb_rank": 19,
+        "kv_cache": 0,
+        "sweep_tests":[
+            {
+                "e2el_kpi": 100,
+                "start_concurrency": 64,
+                "concurrency_step": 8,
+                "inp_tokens": 128
+            },
+            {
+                "e2el_kpi": 100,
+                "start_concurrency": 16,
+                "concurrency_step": 8,
+                "inp_tokens": 256
+            },
+            {
+                "e2el_kpi": 100,
+                "start_concurrency": 8,
+                "concurrency_step": 8,
+                "inp_tokens": 512
+            }
+        ],
+        "benchmark_tests": [
+            {
+                "inp_tokens": 128,
+                "concurrency": 96
+            },
+            {
+                "inp_tokens": 256,
+                "concurrency": 40
+            },
+            {
+                "inp_tokens": 512,
+                "concurrency": 16
+            }
+        ]
+    }
 },
 {
-	"model": "manu/bge-m3-custom-fr",
-	"dtype": "bfloat16",
-	"test_parameters": {
-		"max_tokens": 8194,
-		"embedding_dimension": 1024,
-		"num_parameters": "567M",
-		"mem_usage(MB)": 2166,
-		"mteb_rank": 28,
-		"kv_cache": 0,
-		"sweep_tests":[
-			{
-				"e2el_kpi": 100,
-				"start_concurrency": 64,
-				"concurrency_step": 8,
-				"inp_tokens": 128
-			},
-			{
-				"e2el_kpi": 100,
-				"start_concurrency": 32,
-				"concurrency_step": 8,
-				"inp_tokens": 256
-			},
-			{
-				"e2el_kpi": 100,
-				"start_concurrency": 8,
-				"concurrency_step": 8,
-				"inp_tokens": 512
-			}
-		]
-	}
+    "model": "manu/bge-m3-custom-fr",
+    "dtype": "bfloat16",
+    "test_parameters": {
+        "max_tokens": 8194,
+        "embedding_dimension": 1024,
+        "num_parameters": "567M",
+        "mem_usage(MB)": 2166,
+        "mteb_rank": 28,
+        "kv_cache": 0,
+        "sweep_tests":[
+            {
+                "e2el_kpi": 100,
+                "start_concurrency": 64,
+                "concurrency_step": 8,
+                "inp_tokens": 128
+            },
+            {
+                "e2el_kpi": 100,
+                "start_concurrency": 32,
+                "concurrency_step": 8,
+                "inp_tokens": 256
+            },
+            {
+                "e2el_kpi": 100,
+                "start_concurrency": 8,
+                "concurrency_step": 8,
+                "inp_tokens": 512
+            }
+        ],
+        "benchmark_tests": [
+            {
+                "inp_tokens": 128,
+                "concurrency": 104
+            },
+            {
+                "inp_tokens": 256,
+                "concurrency": 48
+            },
+            {
+                "inp_tokens": 512,
+                "concurrency": 16
+            }
+        ]
+    }
 },
 {
-	"model": "intfloat/multilingual-e5-base",
-	"dtype": "bfloat16",
-	"test_parameters": {
-		"max_tokens": 514,
-		"embedding_dimension": 768,
-		"num_parameters": "278M",
-		"mem_usage(MB)": 1061,
-		"mteb_rank": 33,
-		"kv_cache": 0,
-		"sweep_tests":[
-			{
-				"e2el_kpi": 100,
-				"start_concurrency": 368,
-				"concurrency_step": 8,
-				"inp_tokens": 128
-			},
-			{
-				"e2el_kpi": 100,
-				"start_concurrency": 152,
-				"concurrency_step": 8,
-				"inp_tokens": 256
-			},
-			{
-				"e2el_kpi": 100,
-				"start_concurrency": 64,
-				"concurrency_step": 8,
-				"inp_tokens": 512
-			}
-		]
-	}
+    "model": "intfloat/multilingual-e5-base",
+    "dtype": "bfloat16",
+    "test_parameters": {
+        "max_tokens": 514,
+        "embedding_dimension": 768,
+        "num_parameters": "278M",
+        "mem_usage(MB)": 1061,
+        "mteb_rank": 33,
+        "kv_cache": 0,
+        "sweep_tests":[
+            {
+                "e2el_kpi": 100,
+                "start_concurrency": 368,
+                "concurrency_step": 8,
+                "inp_tokens": 128
+            },
+            {
+                "e2el_kpi": 100,
+                "start_concurrency": 152,
+                "concurrency_step": 8,
+                "inp_tokens": 256
+            },
+            {
+                "e2el_kpi": 100,
+                "start_concurrency": 64,
+                "concurrency_step": 8,
+                "inp_tokens": 512
+            }
+        ],
+        "benchmark_tests": [
+            {
+                "inp_tokens": 128,
+                "concurrency": 400
+            },
+            {
+                "inp_tokens": 256,
+                "concurrency": 208
+            },
+            {
+                "inp_tokens": 512,
+                "concurrency": 96
+            }
+        ]
+    }
 },
 {
-	"model": "intfloat/multilingual-e5-small",
-	"dtype": "bfloat16",
-	"test_parameters": {
-		"max_tokens": 512,
-		"embedding_dimension": 384,
-		"num_parameters": "118M",
-		"mem_usage(MB)": 449,
-		"mteb_rank": 36,
-		"kv_cache": 0,
-		"sweep_tests":[
-			{
-				"e2el_kpi": 100,
-				"start_concurrency": 800,
-				"concurrency_step": 8,
-				"inp_tokens": 128
-			},
-			{
-				"e2el_kpi": 100,
-				"start_concurrency": 384,
-				"concurrency_step": 8,
-				"inp_tokens": 256
-			},
-			{
-				"e2el_kpi": 100,
-				"start_concurrency": 200,
-				"concurrency_step": 8,
-				"inp_tokens": 512
-			}
-		]
-	}
+    "model": "intfloat/multilingual-e5-small",
+    "dtype": "bfloat16",
+    "test_parameters": {
+        "max_tokens": 512,
+        "embedding_dimension": 384,
+        "num_parameters": "118M",
+        "mem_usage(MB)": 449,
+        "mteb_rank": 36,
+        "kv_cache": 0,
+        "sweep_tests":[
+            {
+                "e2el_kpi": 100,
+                "start_concurrency": 1000,
+                "concurrency_step": 8,
+                "inp_tokens": 128
+            },
+            {
+                "e2el_kpi": 100,
+                "start_concurrency": 432,
+                "concurrency_step": 8,
+                "inp_tokens": 256
+            },
+            {
+                "e2el_kpi": 100,
+                "start_concurrency": 208,
+                "concurrency_step": 8,
+                "inp_tokens": 512
+            }
+        ],
+        "benchmark_tests": [
+            {
+                "inp_tokens": 128,
+                "concurrency": 1071
+            },
+            {
+                "inp_tokens": 256,
+                "concurrency": 464
+            },
+            {
+                "inp_tokens": 512,
+                "concurrency": 232
+            }
+        ]
+    }
 },
 {
-	"model": "ibm-granite/granite-embedding-107m-multilingual",
-	"dtype": "bfloat16",
-	"test_parameters": {
-		"max_tokens": 512,
-		"embedding_dimension": 384,
-		"num_parameters": "107M",
-		"mem_usage(MB)": 204,
-		"mteb_rank": 48,
-		"kv_cache": 0,
-		"sweep_tests":[
-			{
-				"e2el_kpi": 10,
-				"start_concurrency": 128,
-				"concurrency_step": 8,
-				"inp_tokens": 128
-			},
-			{
-				"e2el_kpi": 10,
-				"start_concurrency": 64,
-				"concurrency_step": 8,
-				"inp_tokens": 256
-			},
-			{
-				"e2el_kpi": 10,
-				"start_concurrency": 8,
-				"concurrency_step": 8,
-				"inp_tokens": 512
-			}
-		]
-	}
+    "model": "ibm-granite/granite-embedding-107m-multilingual",
+    "dtype": "bfloat16",
+    "test_parameters": {
+        "max_tokens": 512,
+        "embedding_dimension": 384,
+        "num_parameters": "107M",
+        "mem_usage(MB)": 204,
+        "mteb_rank": 48,
+        "kv_cache": 0,
+        "sweep_tests":[
+            {
+                "e2el_kpi": 100,
+                "start_concurrency": 2046,
+                "concurrency_step": 8,
+                "inp_tokens": 128
+            },
+            {
+                "e2el_kpi": 100,
+                "start_concurrency": 864,
+                "concurrency_step": 8,
+                "inp_tokens": 256
+            },
+            {
+                "e2el_kpi": 100,
+                "start_concurrency": 416,
+                "concurrency_step": 8,
+                "inp_tokens": 512
+            }
+        ],
+        "benchmark_tests": [
+            {
+                "inp_tokens": 128,
+                "concurrency": 2256
+            },
+            {
+                "inp_tokens": 256,
+                "concurrency": 1000
+            },
+            {
+                "inp_tokens": 512,
+                "concurrency": 512
+            }
+        ]
+    }
 }
 ]
