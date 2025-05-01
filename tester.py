@@ -96,7 +96,7 @@ def run_benchmark(model, token_comb, containers_conf, qpc, is_warmup, it=1):
     run_docker_cmd(docker_command)
     return results_file_host
 
-def run_benchmark_embed(model, token_comb, containers_conf, qpc, is_warmup):
+def run_benchmark_embed(model, token_comb, containers_conf, qpc, is_warmup, it=1):
     container_image = containers_conf['benchmark']['image']
     cpus = containers_conf['benchmark']['cpuset']
     concurrency = token_comb['concurrency']
@@ -127,6 +127,14 @@ def run_benchmark_iters(model, token_comb, containers_conf, qpc, iterations):
     for i in range(iterations):
         logging.info(f"Starting benchmark for - concurrency: {token_comb['concurrency']}, qpc: {qpc}, iteration: {i+1}")
         result_files.append(run_benchmark(model, token_comb, containers_conf, qpc, False, it=i+1))
+
+    return result_files
+
+def run_benchmark_iters_embed(model, token_comb, containers_conf, qpc, iterations):
+    result_files = []
+    for i in range(iterations):
+        logging.info(f"Starting benchmark for - concurrency: {token_comb['concurrency']}, qpc: {qpc}, iteration: {i+1}")
+        result_files.append(run_benchmark_embed(model, token_comb, containers_conf, qpc, False, it=i+1))
 
     return result_files
 
@@ -266,7 +274,9 @@ def get_configs(args):
     if args.queries_per_concurrency:
         conf['qpc'] = args.queries_per_concurrency
     else:
-        if args.benchmark:
+        if args.embed and args.benchmark:
+            conf['qpc'] = 100
+        elif args.benchmark:
             conf['qpc'] = 20
         elif args.sweep:
             conf['qpc'] = 8
@@ -317,8 +327,8 @@ def benchmark_embed(test, conf):
     qpc = conf['qpc']
     token_combinations = test['test_parameters']['benchmark_tests']
     for token_comb in token_combinations:
-        res_file = run_benchmark_embed(test['model'], token_comb, containers_conf, qpc, False)
-        results = get_json(res_file)
+        res_file = run_benchmark_iters_embed(test['model'], token_comb, containers_conf, qpc, conf['iterations'])
+        results = get_best_result(res_file, 'p90_e2el_ms', min)
         token_comb['p90_query_lat'] = results['p90_e2el_ms']
         token_comb['p90_query_tput'] = results['request_throughput']
 
