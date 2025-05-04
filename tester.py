@@ -107,7 +107,7 @@ def run_benchmark_embed(model, token_comb, containers_conf, qpc, is_warmup, it=1
     results_dir = get_model_res_dir(model) + f"/I{inp_tokens}"
     if not os.path.exists(results_dir):
         os.makedirs(results_dir)
-    results_file = f"result-C{concurrency}.json"
+    results_file = f"result-C{concurrency}-iter{it}.json"
     results_file_container = f"/results/{results_file}"
     results_file_host = f"{results_dir}/{results_file}"
 
