@@ -18,13 +18,14 @@ HUGGING_FACE_HUB_TOKEN = os.environ.get('HUGGING_FACE_HUB_TOKEN', "")
 PROXY_ENV = f"-e HTTP_PROXY={os.environ.get('HTTP_PROXY', '')} -e HTTPS_PROXY={os.environ.get('HTTPS_PROXY', '')} -e NO_PROXY={os.environ.get('NO_PROXY', '')}"
 BENCHMARK_DIR_BASE=os.getcwd()
 
+os.makedirs(RESULTS_DIR_BASE)
 logging.basicConfig(
         level=logging.DEBUG,
         format="{asctime}.{msecs:.0f} - {levelname} - {message}",
         style="{",
         datefmt="%H:%M:%S",
         handlers = [
-                logging.FileHandler('results/tuner.log'),
+                logging.FileHandler(RESULTS_DIR_BASE + '/tuner.log'),
                 logging.StreamHandler()
             ]
         )
@@ -202,7 +203,7 @@ def launch_vllm(test, numa_conf, containers_conf, embed=False):
 
 def prepare_tests(models_conf):
     tests = []
-    os.makedirs(RESULTS_DIR_BASE)
+    #os.makedirs(RESULTS_DIR_BASE)
     for m in models_conf:
         results_dir = get_model_res_dir(m['model'])
         os.makedirs(results_dir)
