@@ -104,6 +104,136 @@
         }
     },
     {
+        "model": "OrdalieTech/Solon-embeddings-large-0.1",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 514,
+            "embedding_dimension": 1024,
+            "num_parameters": "559M",
+            "mem_usage(MB)": 2136,
+            "mteb_rank": 18,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 128,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 256,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 512,
+                    "concurrency": 10
+                }
+            ]
+        }
+    },
+    {
+        "model": "NovaSearch/stella_en_1.5B_v5",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 131072,
+            "embedding_dimension": 8960,
+            "num_parameters": "1B",
+            "mem_usage(MB)": 5887,
+            "mteb_rank": 15,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 128,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 256,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 512,
+                    "concurrency": 10
+                }
+            ]
+        }
+    },
+    {
+        "model": "Snowflake/snowflake-arctic-embed-l-v2.0",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 8192,
+            "embedding_dimension": 1024,
+            "num_parameters": "568M",
+            "mem_usage(MB)": 2166,
+            "mteb_rank": 31,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 128,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 256,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 512,
+                    "concurrency": 10
+                }
+            ]
+        }
+    },
+    {
+        "model": "ibm-granite/granite-embedding-278m-multilingual",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 512,
+            "embedding_dimension": 768,
+            "num_parameters": "278M",
+            "mem_usage(MB)": 530,
+            "mteb_rank": 41,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 128,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 256,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 512,
+                    "concurrency": 10
+                }
+            ]
+        }
+    },
+    {
+        "model": "mixedbread-ai/mxbai-embed-large-v1",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 512,
+            "embedding_dimension": 1024,
+            "num_parameters": "335M",
+            "mem_usage(MB)": 639,
+            "mteb_rank": 51,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 128,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 256,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 512,
+                    "concurrency": 10
+                }
+            ]
+        }
+    },
+    {
         "model": "intfloat/multilingual-e5-large-instruct",
         "dtype": "bfloat16",
         "test_parameters": {
