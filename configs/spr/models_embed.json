@@ -130,32 +130,6 @@
         }
     },
     {
-        "model": "NovaSearch/stella_en_1.5B_v5",
-        "dtype": "bfloat16",
-        "test_parameters": {
-            "max_tokens": 131072,
-            "embedding_dimension": 8960,
-            "num_parameters": "1B",
-            "mem_usage(MB)": 5887,
-            "mteb_rank": 15,
-            "kv_cache": 0,
-            "benchmark_tests": [
-                {
-                    "inp_tokens": 128,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 256,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 512,
-                    "concurrency": 20
-                }
-            ]
-        }
-    },
-    {
         "model": "Snowflake/snowflake-arctic-embed-l-v2.0",
         "dtype": "bfloat16",
         "test_parameters": {
