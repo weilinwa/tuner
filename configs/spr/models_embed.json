@@ -11,36 +11,36 @@
             "kv_cache": 0,
             "sweep_tests":[
                 {
-                    "e2el_kpi": 1200,
-                    "start_concurrency": 8,
-                    "concurrency_step": 8,
+                    "e2el_kpi": 300,
+                    "start_concurrency": 2,
+                    "concurrency_step": 2,
                     "inp_tokens": 128
                 },
                 {
-                    "e2el_kpi": 1500,
-                    "start_concurrency": 8,
-                    "concurrency_step": 8,
+                    "e2el_kpi": 300,
+                    "start_concurrency": 2,
+                    "concurrency_step": 2,
                     "inp_tokens": 256
                 },
                 {
-                    "e2el_kpi": 1500,
-                    "start_concurrency": 8,
-                    "concurrency_step": 8,
+                    "e2el_kpi": 300,
+                    "start_concurrency": 2,
+                    "concurrency_step": 2,
                     "inp_tokens": 512
                 }
             ],
             "benchmark_tests": [
                 {
                     "inp_tokens": 128,
-                    "concurrency": 1
+                    "concurrency": 8
                 },
                 {
                     "inp_tokens": 256,
-                    "concurrency": 1
+                    "concurrency": 4
                 },
                 {
                     "inp_tokens": 512,
-                    "concurrency": 10
+                    "concurrency": 2
                 }
             ]
         }
@@ -57,36 +57,36 @@
             "kv_cache": 0,
              "sweep_tests":[
                 {
-                    "e2el_kpi": 1200,
-                    "start_concurrency": 8,
-                    "concurrency_step": 8,
+                    "e2el_kpi": 300,
+                    "start_concurrency": 2,
+                    "concurrency_step": 2,
                     "inp_tokens": 128
                 },
                 {
-                    "e2el_kpi": 1500,
-                    "start_concurrency": 8,
-                    "concurrency_step": 8,
+                    "e2el_kpi": 300,
+                    "start_concurrency": 2,
+                    "concurrency_step": 2,
                     "inp_tokens": 256
                 },
                 {
-                    "e2el_kpi": 1500,
-                    "start_concurrency": 8,
-                    "concurrency_step": 8,
+                    "e2el_kpi": 300,
+                    "start_concurrency": 2,
+                    "concurrency_step": 2,
                     "inp_tokens": 512
                 }
             ],
             "benchmark_tests": [
                 {
                     "inp_tokens": 128,
-                    "concurrency": 1
+                    "concurrency": 8
                 },
                 {
                     "inp_tokens": 256,
-                    "concurrency": 1
+                    "concurrency": 6
                 },
                 {
                     "inp_tokens": 512,
-                    "concurrency": 10
+                    "concurrency": 2
                 }
             ]
         }
@@ -103,36 +103,36 @@
             "kv_cache": 0,
             "sweep_tests":[
                 {
-                    "e2el_kpi": 500,
+                    "e2el_kpi": 100,
                     "start_concurrency": 8,
                     "concurrency_step": 8,
                     "inp_tokens": 128
                 },
                 {
-                    "e2el_kpi": 500,
+                    "e2el_kpi": 100,
                     "start_concurrency": 8,
                     "concurrency_step": 8,
                     "inp_tokens": 256
                 },
                 {
-                    "e2el_kpi": 500,
-                    "start_concurrency": 8,
-                    "concurrency_step": 8,
+                    "e2el_kpi": 100,
+                    "start_concurrency": 2,
+                    "concurrency_step": 2,
                     "inp_tokens": 512
                 }
             ],
             "benchmark_tests": [
                 {
                     "inp_tokens": 128,
-                    "concurrency": 1
+                    "concurrency": 32
                 },
                 {
                     "inp_tokens": 256,
-                    "concurrency": 1
+                    "concurrency": 16
                 },
                 {
                     "inp_tokens": 512,
-                    "concurrency": 10
+                    "concurrency": 2
                 }
             ]
         }
@@ -149,36 +149,36 @@
             "kv_cache": 0,
             "sweep_tests":[
                 {
-                    "e2el_kpi": 500,
+                    "e2el_kpi": 100,
                     "start_concurrency": 8,
                     "concurrency_step": 8,
                     "inp_tokens": 128
                 },
                 {
-                    "e2el_kpi": 500,
+                    "e2el_kpi": 100,
                     "start_concurrency": 8,
                     "concurrency_step": 8,
                     "inp_tokens": 256
                 },
                 {
-                    "e2el_kpi": 500,
-                    "start_concurrency": 8,
-                    "concurrency_step": 8,
+                    "e2el_kpi": 100,
+                    "start_concurrency": 2,
+                    "concurrency_step": 2,
                     "inp_tokens": 512
                 }
             ],
             "benchmark_tests": [
                 {
                     "inp_tokens": 128,
-                    "concurrency": 1
+                    "concurrency": 32
                 },
                 {
                     "inp_tokens": 256,
-                    "concurrency": 1
+                    "concurrency": 16
                 },
                 {
                     "inp_tokens": 512,
-                    "concurrency": 10
+                    "concurrency": 2
                 }
             ]
         }
@@ -240,37 +240,37 @@
         "mteb_rank": 2,
         "kv_cache": 0,
         "sweep_tests":[
-            {
-                "e2el_kpi": 1200,
-                "start_concurrency": 8,
-                "concurrency_step": 8,
-                "inp_tokens": 128
-            },
-            {
-                "e2el_kpi": 1500,
-                "start_concurrency": 8,
-                "concurrency_step": 8,
-                "inp_tokens": 256
-            },
-            {
-                "e2el_kpi": 1500,
-                "start_concurrency": 8,
-                "concurrency_step": 8,
-                "inp_tokens": 512
-            }
+                {
+                    "e2el_kpi": 300,
+                    "start_concurrency": 2,
+                    "concurrency_step": 2,
+                    "inp_tokens": 128
+                },
+                {
+                    "e2el_kpi": 300,
+                    "start_concurrency": 2,
+                    "concurrency_step": 2,
+                    "inp_tokens": 256
+                },
+                {
+                    "e2el_kpi": 300,
+                    "start_concurrency": 2,
+                    "concurrency_step": 2,
+                    "inp_tokens": 512
+                }
         ],
         "benchmark_tests": [
             {
                 "inp_tokens": 128,
-                "concurrency": 24
+                "concurrency": 8
             },
             {
                 "inp_tokens": 256,
-                "concurrency": 16
+                "concurrency": 6
             },
             {
                 "inp_tokens": 512,
-                "concurrency": 8
+                "concurrency": 2
             }
         ]
     }
