@@ -196,35 +196,35 @@
             "sweep_tests":[
                 {
                     "e2el_kpi": 100,
-                    "start_concurrency": 128,
+                    "start_concurrency": 64,
                     "concurrency_step": 8,
                     "inp_tokens": 128
                 },
                 {
                     "e2el_kpi": 100,
-                    "start_concurrency": 64,
+                    "start_concurrency": 32,
                     "concurrency_step": 8,
                     "inp_tokens": 256
                 },
                 {
                     "e2el_kpi": 100,
-                    "start_concurrency": 16,
-                    "concurrency_step": 8,
+                    "start_concurrency": 2,
+                    "concurrency_step": 2,
                     "inp_tokens": 512
                 }
             ],
             "benchmark_tests": [
                 {
                     "inp_tokens": 128,
-                    "concurrency": 2
+                    "concurrency": 104
                 },
                 {
                     "inp_tokens": 256,
-                    "concurrency": 2
+                    "concurrency": 48
                 },
                 {
                     "inp_tokens": 512,
-                    "concurrency": 20
+                    "concurrency": 10
                 }
             ]
         }
@@ -242,35 +242,35 @@
             "sweep_tests":[
                 {
                     "e2el_kpi": 100,
-                    "start_concurrency": 128,
+                    "start_concurrency": 64,
                     "concurrency_step": 8,
                     "inp_tokens": 128
                 },
                 {
                     "e2el_kpi": 100,
-                    "start_concurrency": 64,
+                    "start_concurrency": 32,
                     "concurrency_step": 8,
                     "inp_tokens": 256
                 },
                 {
                     "e2el_kpi": 100,
-                    "start_concurrency": 16,
-                    "concurrency_step": 8,
+                    "start_concurrency": 2,
+                    "concurrency_step": 2,
                     "inp_tokens": 512
                 }
             ],
             "benchmark_tests": [
                 {
                     "inp_tokens": 128,
-                    "concurrency": 2
+                    "concurrency": 96
                 },
                 {
                     "inp_tokens": 256,
-                    "concurrency": 2
+                    "concurrency": 40
                 },
                 {
                     "inp_tokens": 512,
-                    "concurrency": 20
+                    "concurrency": 10
                 }
             ]
         }
@@ -288,19 +288,19 @@
             "sweep_tests":[
                 {
                     "e2el_kpi": 100,
-                    "start_concurrency": 736,
+                    "start_concurrency": 300,
                     "concurrency_step": 8,
                     "inp_tokens": 128
                 },
                 {
                     "e2el_kpi": 100,
-                    "start_concurrency": 304,
+                    "start_concurrency": 128,
                     "concurrency_step": 8,
                     "inp_tokens": 256
                 },
                 {
                     "e2el_kpi": 100,
-                    "start_concurrency": 128,
+                    "start_concurrency": 32,
                     "concurrency_step": 8,
                     "inp_tokens": 512
                 }
@@ -308,15 +308,15 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 128,
-                    "concurrency": 2
+                    "concurrency": 420
                 },
                 {
                     "inp_tokens": 256,
-                    "concurrency": 2
+                    "concurrency": 208
                 },
                 {
                     "inp_tokens": 512,
-                    "concurrency": 20
+                    "concurrency": 96
                 }
             ]
         }
@@ -334,19 +334,19 @@
             "sweep_tests":[
                 {
                     "e2el_kpi": 100,
-                    "start_concurrency": 736,
+                    "start_concurrency": 96,
                     "concurrency_step": 8,
                     "inp_tokens": 128
                 },
                 {
                     "e2el_kpi": 100,
-                    "start_concurrency": 304,
+                    "start_concurrency": 32,
                     "concurrency_step": 8,
                     "inp_tokens": 256
                 },
                 {
                     "e2el_kpi": 100,
-                    "start_concurrency": 128,
+                    "start_concurrency": 8,
                     "concurrency_step": 8,
                     "inp_tokens": 512
                 }
@@ -354,19 +354,20 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 128,
-                    "concurrency": 2
+                    "concurrency": 104
                 },
                 {
                     "inp_tokens": 256,
-                    "concurrency": 2
+                    "concurrency": 48
                 },
                 {
                     "inp_tokens": 512,
-                    "concurrency": 20
+                    "concurrency": 16
                 }
             ]
         }
-    },{
+    },
+    {
     "model": "intfloat/multilingual-e5-large-instruct",
     "dtype": "bfloat16",
     "test_parameters": {
