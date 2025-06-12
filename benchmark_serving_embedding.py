@@ -57,7 +57,7 @@ from benchmark_dataset import (BurstGPTDataset, HuggingFaceDataset,
                                SonnetDataset, VisionArenaDataset)
 from benchmark_utils import convert_to_pytorch_benchmark_format, write_to_json
 
-MILLISECONDS_TO_SECONDS_CONVERSION = 100
+MILLISECONDS_TO_SECONDS_CONVERSION = 1000
 
 
 @dataclass
