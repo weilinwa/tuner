@@ -149,7 +149,7 @@ def launch_nginx(containers_conf):
     time.sleep(2)
 
 
-def launch_vllm(test, numa_conf, containers_conf, embed=False):
+def launch_vllm(test, numa_conf, containers_conf, embed=False, gpu=False):
     for i, n in enumerate(numa_conf):
         node = i
         cpuset = n['cpubind']
@@ -168,7 +168,11 @@ def launch_vllm(test, numa_conf, containers_conf, embed=False):
         OMP_ENV += f"-e KMP_REDUCTION_BARRIER_PATTERN=dist,dist -e VLLM_V1_USE=1 -e VLLM_CPU_OMP_THREADS_BIND={cpuset}"
 
 #        docker_command = f"docker run -d --rm {PROXY_ENV} -p {port}:8000 --cpuset-cpus={cpuset} --cpuset-mems={mem} -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} -e VLLM_CPU_KVCACHE_SPACE={kv_cache} -v {model_dir}:/root/.cache --name {container_name} --ipc=host {container_image} --trust-remote-code --device cpu --dtype {dtype} --tensor-parallel-size 1 --enforce-eager --served-model-name {served_model_name} --model {model}"
-        docker_command = f"docker run -d --rm --privileged=True {PROXY_ENV} -p {port}:8000 --network vllm_nginx --cpuset-cpus={node_cpus} --cpuset-mems={mem} {OMP_ENV} -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} -e VLLM_CPU_KVCACHE_SPACE={kv_cache} -v {model_dir}:/root/.cache --name {container_name} --ipc=host {container_image} --trust-remote-code --device cpu --dtype {dtype} --tensor-parallel-size 1 --served-model-name {served_model_name} --model {model} -O{compile_config}"
+        if gpu:
+            # TODO: keep the OMP_ENV for GPU tests?
+            docker_command = f"docker run --runtime nvidia --gpu all -d --rm --privileged=True {PROXY_ENV} -p {port}:8000 --network vllm_nginx --cpuset-cpus={node_cpus} --cpuset-mems={mem} {OMP_ENV} -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} -e VLLM_CPU_KVCACHE_SPACE={kv_cache} -v {model_dir}:/root/.cache --name {container_name} --ipc=host {container_image} --trust-remote-code --dtype {dtype} --tensor-parallel-size 1 --served-model-name {served_model_name} --model {model} -O{compile_config}"
+        else:
+            docker_command = f"docker run -d --rm --privileged=True {PROXY_ENV} -p {port}:8000 --network vllm_nginx --cpuset-cpus={node_cpus} --cpuset-mems={mem} {OMP_ENV} -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} -e VLLM_CPU_KVCACHE_SPACE={kv_cache} -v {model_dir}:/root/.cache --name {container_name} --ipc=host {container_image} --trust-remote-code --device cpu --dtype {dtype} --tensor-parallel-size 1 --served-model-name {served_model_name} --model {model} -O{compile_config}"
 
         run_docker_cmd(docker_command)
     logging.info("Waiting 60s for all VLLM containers to initialize")
@@ -378,6 +382,10 @@ def sweep_embed(test, conf):
 
 def main(args):
     #Read all configs
+    if args.platform == 'g6e' and not args.gpu:
+        logging.error("G6e platform requires GPU tests, use -g option to run tests on GPU")
+        sys.exit(1)
+
     conf = get_configs(args)
 
     if args.model and not args.test_parameters and not args.launch_vllm:
@@ -403,7 +411,7 @@ def main(args):
         if mp == None:
             logging.error("specified model {args.model} not found in {args.platform}/models.json")
             sys.exit(1)
-        launch_vllm(mp, conf['numa'], conf['containers'], embed=args.embed)
+        launch_vllm(mp, conf['numa'], conf['containers'], embed=args.embed, gpu=args.gpu)
         logging.info("Done launching vllm containers")
         sys.exit(0)
 
@@ -457,11 +465,12 @@ if __name__ == '__main__':
     parser.add_argument("-np", "--no-proxy", help="don't pass proxy env vars to vllm container", action="store_true")
     parser.add_argument("-qpc", "--queries-per-concurrency", type=int, help="Number of queries to be sent for a given concurrency")
     parser.add_argument("-i", "--iterations", type=int, help="Number of iterations to run per test")
-    parser.add_argument("-p", "--platform", choices=["spr", "gnr"], help="specify test platform (SPR/GNR)", required=True)
+    parser.add_argument("-p", "--platform", choices=["spr", "gnr", "g6e"], help="specify test platform (SPR/GNR/G6e)", required=True)
     parser.add_argument("-nl", "--no-launch-vllm", help="doesn't launch or stop vllm/nginx containers. Use this to run multiple tests on prior launched vllm", action="store_true")
     parser.add_argument("-m", "--model", type=str, help="Specify model (for single model execution). If -tp is not passed, display test parameters of the model and exit")
     parser.add_argument("-tp", "--test-parameters", type=str, help="Specify test parameters in json string format for the specified model")
     parser.add_argument("-e", "--embed", help="run embedding model tests", action="store_true")
+    parser.add_argument("-g", "--gpu", help="run tests on GPU", action="store_true")
     group1 = parser.add_mutually_exclusive_group(required=True)
     group1.add_argument("-b", "--benchmark", help="start benchmark run", action="store_true")
     group1.add_argument("-s", "--sweep", help="start sweeper run", action="store_true")
