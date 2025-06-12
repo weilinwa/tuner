@@ -1,0 +1,16 @@
+{
+	"vllm": {
+		"image": "vllm/vllm-openai:latest"
+	},
+	"benchmark": {
+		"image": "vllm:v0.7.3",
+		"cpuset": "12-15"
+	},
+	"nginx": {
+		"image": "nginx-lb:latest",
+		"cpuset": "0-1"
+	},
+	"dq": {
+		"image": "dq:ch"
+	}
+}
