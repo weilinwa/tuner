@@ -3,7 +3,7 @@
 		"image": "vllm:ipex-cpu-ww09"
 	},
 	"benchmark": {
-		"image": "vllm:v0.7.3",
+		"image": "vllm:v0.8.0",
 		"cpuset": "48-51,145-148"
 	},
 	"nginx": {

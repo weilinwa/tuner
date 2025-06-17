@@ -3,7 +3,7 @@
 		"image": "vllm/vllm-openai:latest"
 	},
 	"benchmark": {
-		"image": "vllm-cpu:0.8.0",
+		"image": "vllm:0.8.0",
 		"cpuset": "12-15"
 	},
 	"nginx": {
