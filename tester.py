@@ -466,7 +466,7 @@ if __name__ == '__main__':
     parser.add_argument("-np", "--no-proxy", help="don't pass proxy env vars to vllm container", action="store_true")
     parser.add_argument("-qpc", "--queries-per-concurrency", type=int, help="Number of queries to be sent for a given concurrency")
     parser.add_argument("-i", "--iterations", type=int, help="Number of iterations to run per test")
-    parser.add_argument("-p", "--platform", choices=["spr", "gnr", "g6e", "spr-dev"], help="specify test platform (SPR/GNR/G6e)", required=True)
+    parser.add_argument("-p", "--platform", choices=["spr", "gnr", "g6e", "r7i-4x"], help="specify test platform (SPR/GNR/G6e)", required=True)
     parser.add_argument("-nl", "--no-launch-vllm", help="doesn't launch or stop vllm/nginx containers. Use this to run multiple tests on prior launched vllm", action="store_true")
     parser.add_argument("-m", "--model", type=str, help="Specify model (for single model execution). If -tp is not passed, display test parameters of the model and exit")
     parser.add_argument("-tp", "--test-parameters", type=str, help="Specify test parameters in json string format for the specified model")
