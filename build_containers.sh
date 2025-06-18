@@ -5,6 +5,8 @@
 # It is designed to be run on a server with Docker installed.
 # The script assumes the following:
 # - Docker is installed and running on the server.
+# AWS ubuntu 24.04 image for CPU does not have docker preinstalled, need to
+# install it first.
 # Usage:
 #   ./build_containers.sh [gpu] # Optional argument to specify GPU setup.
 
@@ -13,13 +15,34 @@
 # Benchmark container: vllm:0.8.0
 set -e
 
-function setup_docker_proxy() {
-    # Ensure the script runs with root privileges
-    if [ "$EUID" -ne 0 ]; then
-      echo "Please run as root"
-      exit
-    fi
+function install_docker() {
+    # install Docker
+    sudo apt update
+    sudo apt install -y ca-certificates curl gnupg
 
+    sudo install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+    echo \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+      $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+    sudo apt update
+
+    sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    docker --version
+
+    sudo usermod -aG docker $USER
+    newgrp docker
+
+    set_docker_proxy
+
+    docker login
+    #with  your credentials
+}
+
+function setup_docker_proxy() {
     # Define proxy settings
     HTTP_PROXY="http://proxy-dmz.intel.com:912"
     HTTPS_PROXY="http://proxy-dmz.intel.com:912"
@@ -27,24 +50,33 @@ function setup_docker_proxy() {
 
     # Docker daemon configuration file
     DOCKER_CONFIG_FILE="/etc/docker/daemon.json"
+    LOCAL_CONFIG_FILE="daemon.json"
 
     # Create or update the daemon.json file
-    if [ ! -f "$DOCKER_CONFIG_FILE" ]; then
-      echo "{}" > "$DOCKER_CONFIG_FILE"
+    if [ ! -f "$LOCAL_CONFIG_FILE" ]; then
+      echo "{}" > "$LOCAL_CONFIG_FILE"
     fi
 
     sudo apt install jq -y
     # Use jq to add proxy settings to the daemon.json file
-    jq ". + {\"proxies\": {\"default\": {\"httpProxy\": \"$HTTP_PROXY\", \"httpsProxy\": \"$HTTPS_PROXY\", \"noProxy\": \"$NO_PROXY\"}}}" \
-      "$DOCKER_CONFIG_FILE" > /tmp/daemon_temp.json && mv /tmp/daemon_temp.json "$DOCKER_CONFIG_FILE"
+    jq ". + {\"proxies\": {\"http-proxy\": \"$HTTP_PROXY\", \"https-proxy\": \"$HTTPS_PROXY\", \"no-proxy\": \"$NO_PROXY\"}}" \
+      "$LOCAL_CONFIG_FILE" > daemon_temp.json && sudo mv daemon_temp.json "$DOCKER_CONFIG_FILE"
 
     # Restart the Docker service to apply changes
     echo "Restarting Docker service..."
-    systemctl restart docker
+    sudo systemctl restart docker
 
     # Verify the changes
     echo "Docker daemon proxy settings:"
     cat "$DOCKER_CONFIG_FILE"
+
+    # Check if ~/.docker directory exists
+    if [ ! -d "$HOME/.docker" ]; then
+      echo "Creating ~/.docker directory..."
+      mkdir -p "$HOME/.docker"
+    else
+      echo "~/.docker directory already exists."
+    fi
 
     # Create an empty config.json if it doesn't exist
     if [ ! -f ~/.docker/config.json ]; then
@@ -62,9 +94,12 @@ function install_docker_containers() {
 
     git clone -b ipex-cpu-ww09 https://github.com/intel-sandbox/vllm-xpu.git
     pushd vllm-xpu
+    sed -i "192i\        cmake_args += [\'-DCMAKE_POLICY_VERSION_MINIMUM=3.5\']" setup.py
     docker build -f Dockerfile.cpu -t vllm:ipex-cpu-ww09 .
+    popd
 
-    git checkout v0.8.0
+    git clone -b v0.8.0 https://github.com/vllm-project/vllm.git
+    pushd vllm
     docker build -f Dockerfile.cpu -t vllm:v0.8.0 .
     popd
 
@@ -118,7 +153,7 @@ function install_docker_containers_gpu() {
 }
 
 function download_models() {
-
+    sudo apt install python3.12-venv
     python3 -m venv vllm_venv
     source vllm_venv/bin/activate
     # Install huggingface-cli
@@ -128,12 +163,14 @@ function download_models() {
     # Download the model
     # Note: Replace `hf_XXXXXXXX` with your actual Hugging Face token.
     # huggingface-cli login --token hf_XXXXXXXX
+    pushd test/tuner
     huggingface-cli download ibm-granite/granite-embedding-278m-multilingual --cache-dir ./models/.cache/huggingface/hub/
     # Download large model from cmdline. Rest of the models are downloaded in the tester script.
     huggingface-cli download Salesforce/SFR-Embedding-Mistral --cache-dir ./models/.cache/huggingface/hub/
     #huggingface-cli download intfloat/multilingual-e5-large-instruct --cache-dir ./models/.cache/huggingface/hub/
     #huggingface-cli download NovaSearch/stella_en_1.5B_v5 --cache-dir ./models/.cache/huggingface/hub/
     #huggingface-cli download intfloat/multilingual-e5-small --cache-dir ./models/.cache/huggingface/hub/
+    popd
 }
 
 # Install docker containers and download models
@@ -143,7 +180,7 @@ if [ "$1" == "gpu" ]; then
 else
     install_docker_containers
 fi
-download_models
+#download_models
 
 
 ## Run the tester script
