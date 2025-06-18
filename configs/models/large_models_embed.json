@@ -13,10 +13,6 @@
                 {
                     "inp_tokens": 100,
                     "concurrency": 1
-                },
-                {
-                    "inp_tokens": 1000,
-                    "concurrency": 1
                 }
             ]
         }
@@ -34,10 +30,6 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 100,
-                    "concurrency": 1
-                },
-                {
-                    "inp_tokens": 1000,
                     "concurrency": 1
                 }
             ]
@@ -57,10 +49,6 @@
                 {
                     "inp_tokens": 100,
                     "concurrency": 1
-                },
-                {
-                    "inp_tokens": 1000,
-                    "concurrency": 1
                 }
             ]
         }
@@ -78,10 +66,6 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 100,
-                    "concurrency": 1
-                },
-                {
-                    "inp_tokens": 1000,
                     "concurrency": 1
                 }
             ]
@@ -101,10 +85,6 @@
                 {
                     "inp_tokens": 100,
                     "concurrency": 1
-                },
-                {
-                    "inp_tokens": 1000,
-                    "concurrency": 1
                 }
             ]
         }
@@ -122,10 +102,6 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 100,
-                    "concurrency": 1
-                },
-                {
-                    "inp_tokens": 1000,
                     "concurrency": 1
                 }
             ]
@@ -145,10 +121,6 @@
                 {
                     "inp_tokens": 100,
                     "concurrency": 1
-                },
-                {
-                    "inp_tokens": 1000,
-                    "concurrency": 1
                 }
             ]
         }
@@ -166,10 +138,6 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 100,
-                    "concurrency": 1
-                },
-                {
-                    "inp_tokens": 1000,
                     "concurrency": 1
                 }
             ]
@@ -189,10 +157,6 @@
                 {
                     "inp_tokens": 100,
                     "concurrency": 1
-                },
-                {
-                    "inp_tokens": 1000,
-                    "concurrency": 1
                 }
             ]
         }
@@ -210,10 +174,6 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 100,
-                    "concurrency": 1
-                },
-                {
-                    "inp_tokens": 1000,
                     "concurrency": 1
                 }
             ]
@@ -233,10 +193,6 @@
                 {
                     "inp_tokens": 100,
                     "concurrency": 1
-                },
-                {
-                    "inp_tokens": 1000,
-                    "concurrency": 1
                 }
             ]
         }
@@ -254,10 +210,6 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 100,
-                    "concurrency": 1
-                },
-                {
-                    "inp_tokens": 1000,
                     "concurrency": 1
                 }
             ]
@@ -277,10 +229,6 @@
                 {
                     "inp_tokens": 100,
                     "concurrency": 1
-                },
-                {
-                    "inp_tokens": 1000,
-                    "concurrency": 1
                 }
             ]
         }
@@ -298,10 +246,6 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 100,
-                    "concurrency": 1
-                },
-                {
-                    "inp_tokens": 1000,
                     "concurrency": 1
                 }
             ]
@@ -321,10 +265,6 @@
                 {
                     "inp_tokens": 100,
                     "concurrency": 1
-                },
-                {
-                    "inp_tokens": 1000,
-                    "concurrency": 1
                 }
             ]
         }
@@ -342,10 +282,6 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 100,
-                    "concurrency": 1
-                },
-                {
-                    "inp_tokens": 1000,
                     "concurrency": 1
                 }
             ]
@@ -365,10 +301,6 @@
                 {
                     "inp_tokens": 100,
                     "concurrency": 1
-                },
-                {
-                    "inp_tokens": 1000,
-                    "concurrency": 1
                 }
             ]
         }
@@ -387,10 +319,6 @@
                 {
                     "inp_tokens": 100,
                     "concurrency": 1
-                },
-                {
-                    "inp_tokens": 1000,
-                    "concurrency": 1
                 }
             ]
         }
@@ -408,10 +336,6 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 100,
-                    "concurrency": 1
-                },
-                {
-                    "inp_tokens": 1000,
                     "concurrency": 1
                 }
             ]
