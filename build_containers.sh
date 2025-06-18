@@ -100,7 +100,7 @@ function install_docker_containers() {
 
     git clone -b v0.8.0 https://github.com/vllm-project/vllm.git
     pushd vllm
-    docker build -f Dockerfile.cpu -t vllm:v0.8.0 .
+    docker build -f Dockerfile.cpu -t vllm:0.8.0 .
     popd
 
     # get tester scripts
