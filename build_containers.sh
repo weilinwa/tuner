@@ -91,6 +91,8 @@ function install_docker_containers() {
 
     mkdir -p test
     pushd test
+    # get tester scripts
+    git clone -b quick_aws_embedding https://github.com/weilinwa/tuner.git
 
     git clone -b ipex-cpu-ww09 https://github.com/intel-sandbox/vllm-xpu.git
     pushd vllm-xpu
@@ -100,11 +102,14 @@ function install_docker_containers() {
 
     git clone -b v0.8.0 https://github.com/vllm-project/vllm.git
     pushd vllm
+
+    # Dynamically get the directory of vllm and update BENCHMARK_DIR_BASE
+    VLLM_DIR=$(pwd)
+    sed -i "s|BENCHMARK_DIR_BASE=os.getcwd()|BENCHMARK_DIR_BASE=\"$VLLM_DIR\"|" ../tuner/tester.py
+
     docker build -f Dockerfile.cpu -t vllm:0.8.0 .
     popd
 
-    # get tester scripts
-    git clone -b quick_aws_embedding https://github.com/weilinwa/tuner.git
     cd tuner
 
     # Build ngix
