@@ -16,7 +16,7 @@ RESULTS_DIR_BASE = os.getcwd()+"/results/result_"+str(int(time.time()))
 SERVED_MODEL_NAME = "model_in_test"
 HUGGING_FACE_HUB_TOKEN = os.environ.get('HUGGING_FACE_HUB_TOKEN', "")
 PROXY_ENV = f"-e HTTP_PROXY={os.environ.get('HTTP_PROXY', '')} -e HTTPS_PROXY={os.environ.get('HTTPS_PROXY', '')} -e NO_PROXY={os.environ.get('NO_PROXY', '')}"
-BENCHMARK_DIR_BASE=os.getcwd()
+BENCHMARK_DIR_BASE="/home/weilinwa/AI/aws/vllm_2"
 BENCHMARK_DIR_SCRIPTS_BASE=os.getcwd()
 
 os.makedirs(RESULTS_DIR_BASE)
@@ -201,7 +201,7 @@ def launch_vllm(test, numa_conf, containers_conf, embed=False, gpu=False):
 
     #Warmup run
     if embed:
-        run_benchmark_embed(test['model'], {'inp_tokens': 128, 'op_tokens': 128, 'concurrency': 32}, containers_conf, 8, True)
+        run_benchmark_embed(test['model'], {'inp_tokens': 100, 'op_tokens': 100, 'concurrency': 10}, containers_conf, 1, True)
     else:
         run_benchmark(test['model'], {'inp_tokens': 128, 'op_tokens': 128, 'concurrency': 2}, containers_conf, 1, True)
 
@@ -471,7 +471,7 @@ if __name__ == '__main__':
     parser.add_argument("-np", "--no-proxy", help="don't pass proxy env vars to vllm container", action="store_true")
     parser.add_argument("-qpc", "--queries-per-concurrency", type=int, help="Number of queries to be sent for a given concurrency")
     parser.add_argument("-i", "--iterations", type=int, help="Number of iterations to run per test")
-    parser.add_argument("-p", "--platform", choices=["spr", "gnr", "g6e", "r7i-4x", "r7i-8x"], help="specify test platform (SPR/GNR/G6e/R7i.4x/R7i.8x)", required=True)
+    parser.add_argument("-p", "--platform", choices=["spr", "gnr", "g6e", "r7i-4x", "r7i-8x", "spr-dev"], help="specify test platform (SPR/GNR/G6e/R7i.4x/R7i.8x)", required=True)
     parser.add_argument("-ms", "--model-size", choices=["s", "l", "o"], help="specify test model list (small_size_list/large_size_list/original_list)", default="o")
     parser.add_argument("-nl", "--no-launch-vllm", help="doesn't launch or stop vllm/nginx containers. Use this to run multiple tests on prior launched vllm", action="store_true")
     parser.add_argument("-m", "--model", type=str, help="Specify model (for single model execution). If -tp is not passed, display test parameters of the model and exit")
