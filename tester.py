@@ -265,7 +265,12 @@ def get_configs(args):
     numa_fn = f"configs/{args.platform}/numa.json"
     models_fn = f"configs/{args.platform}/models.json"
     if args.embed:
-        models_fn = f"configs/{args.platform}/models_embed.json"
+        if args.model_size == "s":
+            models_fn = f"configs/models/small_models_embed.json"
+        elif args.model_size == "l":
+            models_fn = f"configs/models/large_models_embed.json"
+        else:
+            models_fn = f"configs/{args.platform}/models_embed.json"
     containers_fn = f"configs/{args.platform}/containers.json"
 
     conf['numa'] = get_json(numa_fn)
@@ -467,6 +472,7 @@ if __name__ == '__main__':
     parser.add_argument("-qpc", "--queries-per-concurrency", type=int, help="Number of queries to be sent for a given concurrency")
     parser.add_argument("-i", "--iterations", type=int, help="Number of iterations to run per test")
     parser.add_argument("-p", "--platform", choices=["spr", "gnr", "g6e", "r7i-4x"], help="specify test platform (SPR/GNR/G6e)", required=True)
+    parser.add_argument("-ms", "--model-size", choices=["s", "l", "o"], help="specify test model list (small_size_list/large_size_list/original_list)", default="o")
     parser.add_argument("-nl", "--no-launch-vllm", help="doesn't launch or stop vllm/nginx containers. Use this to run multiple tests on prior launched vllm", action="store_true")
     parser.add_argument("-m", "--model", type=str, help="Specify model (for single model execution). If -tp is not passed, display test parameters of the model and exit")
     parser.add_argument("-tp", "--test-parameters", type=str, help="Specify test parameters in json string format for the specified model")

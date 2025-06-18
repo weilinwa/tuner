@@ -1,0 +1,420 @@
+[
+    {
+        "model": "sentence-transformers/static-similarity-mrl-multilingual-v1",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 512,
+            "embedding_dimension": 1024,
+            "num_parameters": "108M",
+            "mem_usage(MB)": 413,
+            "mteb_rank": 84,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "concurrency": 1
+                }
+            ]
+        }
+    },
+    {
+        "model": "intfloat/e5-base-v2",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 512,
+            "embedding_dimension": 768,
+            "num_parameters": "109M",
+            "mem_usage(MB)": 418,
+            "mteb_rank": 59,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "concurrency": 1
+                }
+            ]
+        }
+    },
+    {
+        "model": "avsolatorio/GIST-Embedding-v0",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 512,
+            "embedding_dimension": 768,
+            "num_parameters": "109M",
+            "mem_usage(MB)": 418,
+            "mteb_rank": 67,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "concurrency": 1
+                }
+            ]
+        }
+    },
+    {
+        "model": "intfloat/e5-base",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 512,
+            "embedding_dimension": 768,
+            "num_parameters": "109M",
+            "mem_usage(MB)": 418,
+            "mteb_rank": 83,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "concurrency": 1
+                }
+            ]
+        }
+    },
+    {
+        "model": "Lajavaness/bilingual-embedding-small",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 512,
+            "embedding_dimension": 384,
+            "num_parameters": "117M",
+            "mem_usage(MB)": 449,
+            "mteb_rank": 33,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "concurrency": 1
+                }
+            ]
+        }
+    },
+    {
+        "model": "intfloat/multilingual-e5-small",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 512,
+            "embedding_dimension": 384,
+            "num_parameters": "118M",
+            "mem_usage(MB)": 449,
+            "mteb_rank": 38,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "concurrency": 1
+                }
+            ]
+        }
+    },
+    {
+        "model": "Omartificial-Intelligence-Space/Arabic-MiniLM-L12-v2-all-nli-triplet",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 512,
+            "embedding_dimension": 384,
+            "num_parameters": "117M",
+            "mem_usage(MB)": 449,
+            "mteb_rank": 62,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "concurrency": 1
+                }
+            ]
+        }
+    },
+    {
+        "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 512,
+            "embedding_dimension": 768,
+            "num_parameters": "118M",
+            "mem_usage(MB)": 449,
+            "mteb_rank": 64,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "concurrency": 1
+                }
+            ]
+        }
+    },
+    {
+        "model": "shibing624/text2vec-base-chinese-paraphrase",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 256,
+            "embedding_dimension": 384,
+            "num_parameters": "118M",
+            "mem_usage(MB)": 449,
+            "mteb_rank": 80,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "concurrency": 1
+                }
+            ]
+        }
+    },
+    {
+        "model": "sdadas/mmlw-e5-small",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 512,
+            "embedding_dimension": 384,
+            "num_parameters": "117M",
+            "mem_usage(MB)": 449,
+            "mteb_rank": 89,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "concurrency": 1
+                }
+            ]
+        }
+    },
+    {
+        "model": "sdadas/mmlw-roberta-base",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 514,
+            "embedding_dimension": 768,
+            "num_parameters": "124M",
+            "mem_usage(MB)": 475,
+            "mteb_rank": 95,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "concurrency": 1
+                }
+            ]
+        }
+    },
+    {
+        "model": "minishlab/potion-multilingual-128M",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 512,
+            "embedding_dimension": 256,
+            "num_parameters": "128M",
+            "mem_usage(MB)": 489,
+            "mteb_rank": 79,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "concurrency": 1
+                }
+            ]
+        }
+    },
+    {
+        "model": "nomic-ai/nomic-embed-text-v1",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 8192,
+            "embedding_dimension": 768,
+            "num_parameters": "Unknown",
+            "mem_usage(MB)": 522,
+            "mteb_rank": 57,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "concurrency": 1
+                }
+            ]
+        }
+    },
+    {
+        "model": "nomic-ai/nomic-embed-text-v1.5",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 8192,
+            "embedding_dimension": 768,
+            "num_parameters": "137M",
+            "mem_usage(MB)": 522,
+            "mteb_rank": 78,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "concurrency": 1
+                }
+            ]
+        }
+    },
+    {
+        "model": "Snowflake/snowflake-arctic-embed-m-long",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 2048,
+            "embedding_dimension": 768,
+            "num_parameters": "137M",
+            "mem_usage(MB)": 522,
+            "mteb_rank": 98,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "concurrency": 1
+                }
+            ]
+        }
+    },
+    {
+        "model": "ibm-granite/granite-embedding-278m-multilingual",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 512,
+            "embedding_dimension": 768,
+            "num_parameters": "278M",
+            "mem_usage(MB)": 530,
+            "mteb_rank": 44,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "concurrency": 1
+                }
+            ]
+        }
+    },
+    {
+        "model": "Alibaba-NLP/gte-multilingual-base",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 8192,
+            "embedding_dimension": 768,
+            "num_parameters": "305M",
+            "mem_usage(MB)": 582,
+            "mteb_rank": 25,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "concurrency": 1
+                }
+            ]
+        }
+    },
+    {
+        "model": "mixedbread-ai/mxbai-embed-large-v1",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 512,
+            "embedding_dimension": 1024,
+            "num_parameters": "335M",
+            "mem_usage(MB)": 639,
+            "mteb_rank": 54,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "concurrency": 1
+                }
+            ]
+        }
+    },
+    {
+        "model": "thenlper/gte-large",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "max_tokens": 512,
+            "embedding_dimension": 1024,
+            "num_parameters": "335M",
+            "mem_usage(MB)": 639,
+            "mteb_rank": 66,
+            "kv_cache": 0,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "concurrency": 1
+                }
+            ]
+        }
+    }
+]
