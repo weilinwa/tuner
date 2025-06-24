@@ -16,6 +16,7 @@
 set -e
 
 function install_docker() {
+
     # install Docker
     sudo apt update
     sudo apt install -y ca-certificates curl gnupg
@@ -177,6 +178,9 @@ function download_models() {
     #huggingface-cli download intfloat/multilingual-e5-small --cache-dir ./models/.cache/huggingface/hub/
     popd
 }
+
+# Install docker if does not exist
+install_docker
 
 # Install docker containers and download models
 setup_docker_proxy
