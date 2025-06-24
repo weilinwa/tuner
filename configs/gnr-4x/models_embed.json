@@ -12,15 +12,7 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 128,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 256,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 512,
-                    "concurrency": 20
+                    "concurrency": 1
                 }
             ]
         }
@@ -38,15 +30,7 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 128,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 256,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 512,
-                    "concurrency": 20
+                    "concurrency": 1
                 }
             ]
         }
@@ -64,15 +48,7 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 128,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 256,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 512,
-                    "concurrency": 20
+                    "concurrency": 1
                 }
             ]
         }
@@ -90,15 +66,7 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 128,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 256,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 512,
-                    "concurrency": 20
+                    "concurrency": 1
                 }
             ]
         }
@@ -116,15 +84,7 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 128,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 256,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 512,
-                    "concurrency": 20
+                    "concurrency": 1
                 }
             ]
         }
@@ -142,15 +102,7 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 128,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 256,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 512,
-                    "concurrency": 20
+                    "concurrency": 1
                 }
             ]
         }
@@ -168,15 +120,7 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 128,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 256,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 512,
-                    "concurrency": 20
+                    "concurrency": 1
                 }
             ]
         }
@@ -194,15 +138,7 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 128,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 256,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 512,
-                    "concurrency": 20
+                    "concurrency": 1
                 }
             ]
         }
@@ -220,15 +156,7 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 128,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 256,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 512,
-                    "concurrency": 20
+                    "concurrency": 1
                 }
             ]
         }
@@ -246,15 +174,7 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 128,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 256,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 512,
-                    "concurrency": 20
+                    "concurrency": 1
                 }
             ]
         }
@@ -272,15 +192,7 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 128,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 256,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 512,
-                    "concurrency": 20
+                    "concurrency": 1
                 }
             ]
         }
@@ -298,15 +210,7 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 128,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 256,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 512,
-                    "concurrency": 20
+                    "concurrency": 1
                 }
             ]
         }
@@ -324,15 +228,7 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 128,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 256,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 512,
-                    "concurrency": 20
+                    "concurrency": 1
                 }
             ]
         }
@@ -350,15 +246,7 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 128,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 256,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 512,
-                    "concurrency": 20
+                    "concurrency": 1
                 }
             ]
         }
@@ -376,15 +264,7 @@
             "benchmark_tests": [
                 {
                     "inp_tokens": 128,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 256,
-                    "concurrency": 2
-                },
-                {
-                    "inp_tokens": 512,
-                    "concurrency": 20
+                    "concurrency": 1
                 }
             ]
         }
