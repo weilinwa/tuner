@@ -4,7 +4,7 @@
 	},
 	"benchmark": {
 		"image": "vllm:0.8.0",
-		"cpuset": "12-15"
+		"cpuset": "32-35"
 	},
 	"nginx": {
 		"image": "nginx-lb:latest",

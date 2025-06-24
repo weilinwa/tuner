@@ -1,7 +1,7 @@
 [
     {
         "node": "16-31",
-        "cpubind": "16-27",
+        "cpubind": "17-31",
         "membind": "0",
         "memory": "128000m"
     }

@@ -11,25 +11,7 @@
             "kv_cache": 0,
             "benchmark_tests": [
                 {
-                    "inp_tokens": 128,
-                    "concurrency": 1
-                }
-            ]
-        }
-    },
-    {
-        "model": "Salesforce/SFR-Embedding-Mistral",
-        "dtype": "bfloat16",
-        "test_parameters": {
-            "max_tokens": 32768,
-            "embedding_dimension": 4096,
-            "num_parameters": "7B",
-            "mem_usage(MB)": 13563,
-            "mteb_rank": 5,
-            "kv_cache": 0,
-            "benchmark_tests": [
-                {
-                    "inp_tokens": 128,
+                    "inp_tokens": 100,
                     "concurrency": 1
                 }
             ]
@@ -47,7 +29,7 @@
             "kv_cache": 0,
             "benchmark_tests": [
                 {
-                    "inp_tokens": 128,
+                    "inp_tokens": 100,
                     "concurrency": 1
                 }
             ]
@@ -65,7 +47,7 @@
             "kv_cache": 0,
             "benchmark_tests": [
                 {
-                    "inp_tokens": 128,
+                    "inp_tokens": 100,
                     "concurrency": 1
                 }
             ]
@@ -83,7 +65,7 @@
             "kv_cache": 0,
             "benchmark_tests": [
                 {
-                    "inp_tokens": 128,
+                    "inp_tokens": 100,
                     "concurrency": 1
                 }
             ]
@@ -101,7 +83,7 @@
             "kv_cache": 0,
             "benchmark_tests": [
                 {
-                    "inp_tokens": 128,
+                    "inp_tokens": 100,
                     "concurrency": 1
                 }
             ]
@@ -119,7 +101,7 @@
             "kv_cache": 0,
             "benchmark_tests": [
                 {
-                    "inp_tokens": 128,
+                    "inp_tokens": 100,
                     "concurrency": 1
                 }
             ]
@@ -137,7 +119,7 @@
             "kv_cache": 0,
             "benchmark_tests": [
                 {
-                    "inp_tokens": 128,
+                    "inp_tokens": 100,
                     "concurrency": 1
                 }
             ]
@@ -155,7 +137,7 @@
             "kv_cache": 0,
             "benchmark_tests": [
                 {
-                    "inp_tokens": 128,
+                    "inp_tokens": 100,
                     "concurrency": 1
                 }
             ]
@@ -173,7 +155,7 @@
             "kv_cache": 0,
             "benchmark_tests": [
                 {
-                    "inp_tokens": 128,
+                    "inp_tokens": 100,
                     "concurrency": 1
                 }
             ]
@@ -191,7 +173,7 @@
             "kv_cache": 0,
             "benchmark_tests": [
                 {
-                    "inp_tokens": 128,
+                    "inp_tokens": 100,
                     "concurrency": 1
                 }
             ]
@@ -209,7 +191,7 @@
             "kv_cache": 0,
             "benchmark_tests": [
                 {
-                    "inp_tokens": 128,
+                    "inp_tokens": 100,
                     "concurrency": 1
                 }
             ]
@@ -227,7 +209,7 @@
             "kv_cache": 0,
             "benchmark_tests": [
                 {
-                    "inp_tokens": 128,
+                    "inp_tokens": 100,
                     "concurrency": 1
                 }
             ]
@@ -245,7 +227,7 @@
             "kv_cache": 0,
             "benchmark_tests": [
                 {
-                    "inp_tokens": 128,
+                    "inp_tokens": 100,
                     "concurrency": 1
                 }
             ]
@@ -263,7 +245,7 @@
             "kv_cache": 0,
             "benchmark_tests": [
                 {
-                    "inp_tokens": 128,
+                    "inp_tokens": 100,
                     "concurrency": 1
                 }
             ]
