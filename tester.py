@@ -11,6 +11,7 @@ import argparse
 
 
 MODEL_DIR_BASE = os.getcwd()+"/models"
+TRACE_DIR_BASE = os.getcwd()+"/traces_server"
 NGINX_DIR_BASE = os.getcwd()+"/nginx"
 RESULTS_DIR_BASE = os.getcwd()+"/results/result_"+str(int(time.time()))
 SERVED_MODEL_NAME = "model_in_test"
@@ -98,7 +99,7 @@ def run_benchmark(model, token_comb, containers_conf, qpc, is_warmup, it=1):
     run_docker_cmd(docker_command)
     return results_file_host
 
-def run_benchmark_embed(model, token_comb, containers_conf, qpc, is_warmup, it=1):
+def run_benchmark_embed(model, token_comb, containers_conf, qpc, is_warmup, it=1, trace=False):
     container_image = containers_conf['benchmark']['image']
     cpus = containers_conf['benchmark']['cpuset']
     concurrency = token_comb['concurrency']
@@ -107,6 +108,7 @@ def run_benchmark_embed(model, token_comb, containers_conf, qpc, is_warmup, it=1
     num_prompts = concurrency * qpc
     model_dir = f"{MODEL_DIR_BASE}"
     results_dir = get_model_res_dir(model) + f"/I{inp_tokens}"
+    TRACE_ENV = "--profile" if trace else "" # TODO: trace is only applied on warmup run
     if not os.path.exists(results_dir):
         os.makedirs(results_dir)
     results_file = f"result-C{concurrency}-iter{it}.json"
@@ -116,7 +118,7 @@ def run_benchmark_embed(model, token_comb, containers_conf, qpc, is_warmup, it=1
     docker_command = ""
 
     if is_warmup:
-        docker_command = f"docker run -it --cpuset-cpus={cpus} --rm --net=host {PROXY_ENV} -v {BENCHMARK_DIR_BASE}/benchmarks/:/workspace/vllm/benchmarks/ -v {BENCHMARK_DIR_SCRIPTS_BASE}/benchmark_serving_embedding.py:/workspace/vllm/benchmarks/benchmark_serving_embedding.py -v {BENCHMARK_DIR_SCRIPTS_BASE}/backend_request_func.py:/workspace/vllm/benchmarks/backend_request_func.py -v {model_dir}:/root/.cache -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} --entrypoint=python3 {container_image} /workspace/vllm/benchmarks/benchmark_serving_embedding.py --port 8000 --backend vllm-embed --endpoint /v1/embeddings --dataset-name random --request-rate {concurrency} --num-prompts {num_prompts} --random-input-len {inp_tokens} --random-output-len {inp_tokens} --ignore-eos --percentile-metrics ttft,tpot,itl,e2el --served-model-name {served_model_name} --metric-percentiles 50,90,99 --max-concurrency {concurrency} --model {model}"
+        docker_command = f"docker run -it --cpuset-cpus={cpus} --rm --net=host {PROXY_ENV} -v {BENCHMARK_DIR_BASE}/benchmarks/:/workspace/vllm/benchmarks/ -v {BENCHMARK_DIR_SCRIPTS_BASE}/benchmark_serving_embedding.py:/workspace/vllm/benchmarks/benchmark_serving_embedding.py -v {BENCHMARK_DIR_SCRIPTS_BASE}/backend_request_func.py:/workspace/vllm/benchmarks/backend_request_func.py -v {model_dir}:/root/.cache -v /home/weilinwa/AI/aws/test_scripts/tuner/traces/:/root/traces/ -e VLLM_TROCH_PROFILER_DIR=/root/traces/ -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} --entrypoint=python3 {container_image} /workspace/vllm/benchmarks/benchmark_serving_embedding.py --port 8000 --backend vllm-embed --endpoint /v1/embeddings --dataset-name random --request-rate {concurrency} --num-prompts {num_prompts} --random-input-len {inp_tokens} --random-output-len {inp_tokens} --ignore-eos --percentile-metrics ttft,tpot,itl,e2el --served-model-name {served_model_name} --metric-percentiles 50,90,99 --max-concurrency {concurrency} {TRACE_ENV} --model {model}"
     else:
         docker_command = f"docker run -it --cpuset-cpus={cpus} --rm --net=host {PROXY_ENV} -v {BENCHMARK_DIR_BASE}/benchmarks/:/workspace/vllm/benchmarks/ -v {BENCHMARK_DIR_SCRIPTS_BASE}/benchmark_serving_embedding.py:/workspace/vllm/benchmarks/benchmark_serving_embedding.py -v {BENCHMARK_DIR_SCRIPTS_BASE}/backend_request_func.py:/workspace/vllm/benchmarks/backend_request_func.py -v {model_dir}:/root/.cache -v {results_dir}:/results -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} --entrypoint=python3 {container_image} /workspace/vllm/benchmarks/benchmark_serving_embedding.py --port 8000 --backend vllm-embed --endpoint /v1/embeddings --dataset-name random --request-rate {concurrency} --num-prompts {num_prompts} --random-input-len {inp_tokens} --random-output-len {inp_tokens} --ignore-eos --percentile-metrics ttft,tpot,itl,e2el --served-model-name {served_model_name} --metric-percentiles 50,90,99 --max-concurrency {concurrency} --save-result --result-filename {results_file_container} --model {model}"
 
@@ -150,7 +152,7 @@ def launch_nginx(containers_conf):
     time.sleep(2)
 
 
-def launch_vllm(test, numa_conf, containers_conf, embed=False, gpu=False):
+def launch_vllm(test, numa_conf, containers_conf, embed=False, gpu=False, trace=False):
     for i, n in enumerate(numa_conf):
         node = i
         cpuset = n['cpubind']
@@ -168,17 +170,19 @@ def launch_vllm(test, numa_conf, containers_conf, embed=False, gpu=False):
         compile_config = 3
         OMP_ENV = "-e KMP_BLOCKTIME=1 -e KMP_TPAUSE=0 -e KMP_SETTINGS=0 -e KMP_FORKJOIN_BARRIER_PATTERN=dist,dist -e KMP_PLAIN_BARRIER_PATTERN=dist,dist "
         OMP_ENV += f"-e KMP_REDUCTION_BARRIER_PATTERN=dist,dist -e VLLM_V1_USE=1 -e VLLM_CPU_OMP_THREADS_BIND={cpuset}"
+        trace_dir=f"{TRACE_DIR_BASE}"
+        TRACE_ENV = f"-v {trace_dir}:/root/traces/ -e VLLM_TORCH_PROFILER_DIR=/root/traces/" if trace else ""
 
 #        docker_command = f"docker run -d --rm {PROXY_ENV} -p {port}:8000 --cpuset-cpus={cpuset} --cpuset-mems={mem} -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} -e VLLM_CPU_KVCACHE_SPACE={kv_cache} -v {model_dir}:/root/.cache --name {container_name} --ipc=host {container_image} --trust-remote-code --device cpu --dtype {dtype} --tensor-parallel-size 1 --enforce-eager --served-model-name {served_model_name} --model {model}"
         if gpu:
             # TODO: keep the OMP_ENV for GPU tests?
-            docker_command = f"docker run --runtime nvidia --gpus all -d --rm --privileged=True {PROXY_ENV} -p {port}:8000 --network vllm_nginx --cpuset-cpus={node_cpus} --cpuset-mems={mem} {OMP_ENV} -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} -e VLLM_CPU_KVCACHE_SPACE={kv_cache} -v {model_dir}:/root/.cache --name {container_name} --ipc=host {container_image} --trust-remote-code --dtype {dtype} --tensor-parallel-size 1 --served-model-name {served_model_name} --model {model} -O{compile_config}"
+            docker_command = f"docker run --runtime nvidia --gpus all -d --rm --privileged=True {PROXY_ENV} -p {port}:8000 --network vllm_nginx --cpuset-cpus={node_cpus} --cpuset-mems={mem} {OMP_ENV} -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} -e VLLM_CPU_KVCACHE_SPACE={kv_cache} -v {model_dir}:/root/.cache {TRACE_ENV} --name {container_name} --ipc=host {container_image} --trust-remote-code --dtype {dtype} --tensor-parallel-size 1 --served-model-name {served_model_name} --model {model} -O{compile_config}"
         else:
-            docker_command = f"docker run -d --rm --privileged=True {PROXY_ENV} -p {port}:8000 --network vllm_nginx --cpuset-cpus={node_cpus} --cpuset-mems={mem} {memory_opt} {OMP_ENV} -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} -e VLLM_CPU_KVCACHE_SPACE={kv_cache} -v {model_dir}:/root/.cache --name {container_name} --ipc=host {container_image} --trust-remote-code --device cpu --dtype {dtype} --tensor-parallel-size 1 --served-model-name {served_model_name} --model {model} -O{compile_config}"
+            docker_command = f"docker run -d --rm --privileged=True {PROXY_ENV} -p {port}:8000 --network vllm_nginx --cpuset-cpus={node_cpus} --cpuset-mems={mem} {memory_opt} {OMP_ENV} -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} -e VLLM_CPU_KVCACHE_SPACE={kv_cache} -v {model_dir}:/root/.cache {TRACE_ENV} --name {container_name} --ipc=host {container_image} --trust-remote-code --device cpu --dtype {dtype} --tensor-parallel-size 1 --served-model-name {served_model_name} --model {model} -O{compile_config}"
 
         run_docker_cmd(docker_command)
     logging.info("Waiting 60s for all VLLM containers to initialize")
-    time.sleep(60)
+    #time.sleep(60)
 
     for i, n in enumerate(numa_conf):
         ready = False
@@ -202,7 +206,7 @@ def launch_vllm(test, numa_conf, containers_conf, embed=False, gpu=False):
 
     #Warmup run
     if embed:
-        run_benchmark_embed(test['model'], {'inp_tokens': 100, 'op_tokens': 100, 'concurrency': 10}, containers_conf, 1, True)
+        run_benchmark_embed(test['model'], {'inp_tokens': 100, 'op_tokens': 100, 'concurrency': 10}, containers_conf, 1, True, trace=trace)
     else:
         run_benchmark(test['model'], {'inp_tokens': 128, 'op_tokens': 128, 'concurrency': 2}, containers_conf, 1, True)
 
@@ -435,7 +439,10 @@ def main(args):
     for test in tests:
         #Launch vllm server for first model (mount models dir and result dir for profile)
         if not args.no_launch_vllm:
-            launch_vllm(test, conf['numa'], conf['containers'], embed=args.embed, gpu=args.gpu)
+            launch_vllm(test, conf['numa'], conf['containers'], embed=args.embed, gpu=args.gpu, trace=args.trace)
+            if args.trace:
+                logging.info("Run with vllm profiler, the benchmark result is not representative and therefore skipped")
+                continue
 
         if args.embed and args.sweep:
             sweep_embed(test, conf)
@@ -450,6 +457,10 @@ def main(args):
             stop_vllm(conf['numa'])
 
     logging.info("--- Final test summary ---")
+    if args.trace:
+        logging.info("Run with vllm profiler, the benchmark result is not representative and therefore skipped")
+        print(f"Traces are stored in {TRACE_DIR_BASE}")
+        sys.exit(0)
     for test in tests:
         logging.info(f"  Model: {test['model']}")
         token_combinations = test['test_parameters']['benchmark_tests'] if args.benchmark else test['test_parameters']['sweep_tests']
@@ -465,6 +476,8 @@ def main(args):
 
             logging.info(f"      P90 Query latency {round(token_comb['p90_query_lat'], 2)} ms")
             logging.info(f"      P90 Query throughput {round(token_comb['p90_query_tput'], 2)} queries/sec")
+    logging.info("--- End of test summary ---")
+    print(f"Results are stored in {RESULTS_DIR_BASE}")
 
 
 if __name__ == '__main__':
@@ -481,6 +494,7 @@ if __name__ == '__main__':
     parser.add_argument("-g", "--gpu", help="run tests on GPU", action="store_true")
     group1 = parser.add_mutually_exclusive_group(required=True)
     group1.add_argument("-b", "--benchmark", help="start benchmark run", action="store_true")
+    group1.add_argument("-tt", "--trace", help="run vllm profiler", action="store_true")
     group1.add_argument("-s", "--sweep", help="start sweeper run", action="store_true")
     group1.add_argument("-l", "--launch-vllm", help="only launches the vllm/nginx containers, user should stop the containers after use with docker stop", action="store_true")
     args = parser.parse_args()
