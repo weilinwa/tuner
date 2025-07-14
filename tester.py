@@ -206,7 +206,7 @@ def launch_vllm(test, numa_conf, containers_conf, embed=False, gpu=False, trace=
 
     #Warmup run
     if embed:
-        run_benchmark_embed(test['model'], {'inp_tokens': 100, 'op_tokens': 100, 'concurrency': 10}, containers_conf, 1, True, trace=trace)
+        run_benchmark_embed(test['model'], {'inp_tokens': 128, 'op_tokens': 128, 'concurrency': 10}, containers_conf, 1, True, trace=trace)
     else:
         run_benchmark(test['model'], {'inp_tokens': 128, 'op_tokens': 128, 'concurrency': 2}, containers_conf, 1, True)
 
@@ -274,6 +274,8 @@ def get_configs(args):
             models_fn = f"configs/models/small_models_embed.json"
         elif args.model_size == "l":
             models_fn = f"configs/models/large_models_embed.json"
+        elif args.model_size == "o":
+            models_fn = f"configs/models/models_embed.json"
         else:
             models_fn = f"configs/{args.platform}/models_embed.json"
     containers_fn = f"configs/{args.platform}/containers.json"
@@ -486,7 +488,7 @@ if __name__ == '__main__':
     parser.add_argument("-qpc", "--queries-per-concurrency", type=int, help="Number of queries to be sent for a given concurrency")
     parser.add_argument("-i", "--iterations", type=int, help="Number of iterations to run per test")
     parser.add_argument("-p", "--platform", choices=["spr", "gnr", "g6e", "r7i-4x", "r7i-8x", "gnr-4x", "gnr-4x-small", "spr-dev"], help="specify test platform (SPR/GNR/G6e/R7i.4x/R7i.8x)", required=True)
-    parser.add_argument("-ms", "--model-size", choices=["s", "l", "o"], help="specify test model list (small_size_list/large_size_list/original_list)", default="o")
+    parser.add_argument("-ms", "--model-size", choices=["s", "l", "o"], help="specify test model list instead of using the platform specific ones (small_size_list/large_size_list/original_list)", default="o")
     parser.add_argument("-nl", "--no-launch-vllm", help="doesn't launch or stop vllm/nginx containers. Use this to run multiple tests on prior launched vllm", action="store_true")
     parser.add_argument("-m", "--model", type=str, help="Specify model (for single model execution). If -tp is not passed, display test parameters of the model and exit")
     parser.add_argument("-tp", "--test-parameters", type=str, help="Specify test parameters in json string format for the specified model")
