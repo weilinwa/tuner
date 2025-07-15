@@ -319,6 +319,9 @@ def get_best_result(res_files, res_param, compare):
 
     for f in res_files:
         r = get_json(f)
+        if not r:
+            logging.warning(f"Skipping file {f} due to failed JSON parsing.")
+            continue
         best_res = compare(r[res_param], best_res)
         if best_res == r[res_param]:
             best_res_file = f
@@ -347,8 +350,9 @@ def benchmark_embed(test, conf):
     for token_comb in token_combinations:
         res_file = run_benchmark_iters_embed(test['model'], token_comb, containers_conf, qpc, conf['iterations'])
         results = get_best_result(res_file, 'p90_e2el_ms', min)
-        token_comb['p90_query_lat'] = results['p90_e2el_ms']
-        token_comb['p90_query_tput'] = results['request_throughput']
+        if results and 'p90_e2el_ms' in results and 'request_throughput' in results:
+            token_comb['p90_query_lat'] = results['p90_e2el_ms']
+            token_comb['p90_query_tput'] = results['request_throughput']
 
 
 def sweep(test, conf):
@@ -476,8 +480,9 @@ def main(args):
             else:
                 logging.info(f"    Inp tokens: {token_comb['inp_tokens']}, Concurrency: {token_comb['concurrency']}")
 
-            logging.info(f"      P90 Query latency {round(token_comb['p90_query_lat'], 2)} ms")
-            logging.info(f"      P90 Query throughput {round(token_comb['p90_query_tput'], 2)} queries/sec")
+            if 'token_comb' in token_comb and 'p90_query_lat' in token_comb and 'p90_query_tput' in token_comb:
+                logging.info(f"      P90 Query latency {round(token_comb['p90_query_lat'], 2)} ms")
+                logging.info(f"      P90 Query throughput {round(token_comb['p90_query_tput'], 2)} queries/sec")
     logging.info("--- End of test summary ---")
     print(f"Results are stored in {RESULTS_DIR_BASE}")
 
