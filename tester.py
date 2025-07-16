@@ -148,7 +148,7 @@ def launch_nginx(containers_conf):
     cpus = containers_conf['nginx']['cpuset']
     logging.info("Launching nginx...")
     docker_command = f"docker run --rm -itd --cpuset-cpus={cpus} -p 8000:80 --network vllm_nginx -v {NGINX_DIR_BASE}/nginx_conf/:/etc/nginx/conf.d/ --name nginx-lb {container_image}"
-    run_docker_cmd(docker_command)
+    run_docker_cmd(docker_command, is_exit=False)
     time.sleep(2)
 
 
@@ -172,17 +172,19 @@ def launch_vllm(test, numa_conf, containers_conf, embed=False, gpu=False, trace=
         OMP_ENV += f"-e KMP_REDUCTION_BARRIER_PATTERN=dist,dist -e VLLM_V1_USE=1 -e VLLM_CPU_OMP_THREADS_BIND={cpuset}"
         trace_dir=f"{TRACE_DIR_BASE}"
         TRACE_ENV = f"-v {trace_dir}:/root/traces/ -e VLLM_TORCH_PROFILER_DIR=/root/traces/" if trace else ""
+        #LOG_OPT=f"--log-driver json-file --log-opt max-size=10m --log-opt max-file=3"
+        LOG_OPT = ''
 
 #        docker_command = f"docker run -d --rm {PROXY_ENV} -p {port}:8000 --cpuset-cpus={cpuset} --cpuset-mems={mem} -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} -e VLLM_CPU_KVCACHE_SPACE={kv_cache} -v {model_dir}:/root/.cache --name {container_name} --ipc=host {container_image} --trust-remote-code --device cpu --dtype {dtype} --tensor-parallel-size 1 --enforce-eager --served-model-name {served_model_name} --model {model}"
         if gpu:
             # TODO: keep the OMP_ENV for GPU tests?
-            docker_command = f"docker run --runtime nvidia --gpus all -d --rm --privileged=True {PROXY_ENV} -p {port}:8000 --network vllm_nginx --cpuset-cpus={node_cpus} --cpuset-mems={mem} {OMP_ENV} -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} -e VLLM_CPU_KVCACHE_SPACE={kv_cache} -v {model_dir}:/root/.cache {TRACE_ENV} --name {container_name} --ipc=host {container_image} --trust-remote-code --dtype {dtype} --tensor-parallel-size 1 --served-model-name {served_model_name} --model {model} -O{compile_config}"
+            docker_command = f"docker run --runtime nvidia --gpus all -d --rm --privileged=True {PROXY_ENV} -p {port}:8000 --network vllm_nginx --cpuset-cpus={node_cpus} --cpuset-mems={mem} {OMP_ENV} {LOG_OPT}  -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} -e VLLM_CPU_KVCACHE_SPACE={kv_cache} -v {model_dir}:/root/.cache {TRACE_ENV} --name {container_name} --ipc=host {container_image} --trust-remote-code --dtype {dtype} --tensor-parallel-size 1 --served-model-name {served_model_name} --model {model}"
         else:
-            docker_command = f"docker run -d --rm --privileged=True {PROXY_ENV} -p {port}:8000 --network vllm_nginx --cpuset-cpus={node_cpus} --cpuset-mems={mem} {memory_opt} {OMP_ENV} -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} -e VLLM_CPU_KVCACHE_SPACE={kv_cache} -v {model_dir}:/root/.cache {TRACE_ENV} --name {container_name} --ipc=host {container_image} --trust-remote-code --device cpu --dtype {dtype} --tensor-parallel-size 1 --served-model-name {served_model_name} --model {model} -O{compile_config}"
+            docker_command = f"docker run -d --rm --privileged=True {PROXY_ENV} -p {port}:8000 --network vllm_nginx --cpuset-cpus={node_cpus} --cpuset-mems={mem} {memory_opt} {OMP_ENV} {LOG_OPT} -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} -e VLLM_CPU_KVCACHE_SPACE={kv_cache} -v {model_dir}:/root/.cache {TRACE_ENV} --name {container_name} --ipc=host {container_image} --trust-remote-code --device cpu --dtype {dtype} --tensor-parallel-size 1 --served-model-name {served_model_name} --model {model} -O{compile_config}"
 
         run_docker_cmd(docker_command)
     logging.info("Waiting 60s for all VLLM containers to initialize")
-    #time.sleep(60)
+    time.sleep(60)
 
     for i, n in enumerate(numa_conf):
         ready = False
@@ -250,17 +252,20 @@ def run_download(container_image):
         os.makedirs(model_dir)
 
     docker_command = f"docker run --rm {PROXY_ENV} -e HUGGING_FACE_HUB_TOKEN={HUGGING_FACE_HUB_TOKEN} -v {pwd}/configs:/workspace/configs -v {model_dir}:/root/.cache {container_image}"
-    run_docker_cmd(docker_command)
+    run_docker_cmd(docker_command, is_exit=False)
 
 
-def get_json(fn):
+def get_json(fn, fail_on_empty=True):
     j = None
     try:
         with open(fn, 'r') as f:
             j = json.load(f)
     except Exception as e:
         logging.error(f"Opening file {fn} failed with exception {e}", exc_info=True)
-        #sys.exit(1)
+        if not fail_on_empty:
+            return {"error": str(e)}
+        else:
+            sys.exit(1)
     return j or {}
 
 
@@ -318,10 +323,10 @@ def get_best_result(res_files, res_param, compare):
     best_res_file = ""
 
     for f in res_files:
-        r = get_json(f)
-        if not r:
+        r = get_json(f, fail_on_empty=False)
+        if not r or 'error' in r:
             logging.warning(f"Skipping file {f} due to failed JSON parsing.")
-            continue
+            return r
         best_res = compare(r[res_param], best_res)
         if best_res == r[res_param]:
             best_res_file = f
@@ -343,16 +348,31 @@ def benchmark(test, conf):
         token_comb['p90_query_lat'] = results['p90_e2el_ms']
         token_comb['p90_query_tput'] = results['request_throughput']
 
-def benchmark_embed(test, conf):
+def benchmark_embed(test, conf, args):
     containers_conf = conf['containers']
     qpc = conf['qpc']
     token_combinations = test['test_parameters']['benchmark_tests']
-    for token_comb in token_combinations:
+    last_failure = -1
+    i = 0
+    while i < len(token_combinations):
+        token_comb = token_combinations[i]
         res_file = run_benchmark_iters_embed(test['model'], token_comb, containers_conf, qpc, conf['iterations'])
         results = get_best_result(res_file, 'p90_e2el_ms', min)
+        if 'error' in results:
+            logging.warning(f"Skipping benchmark for {test['model']} due to failed JSON parsing.")
+            if i < len(token_combinations) - 1:
+                logging.info(f"Re-launching vllm containers for next token_comb after failure: {token_comb['inp_tokens']}, {token_comb['concurrency']}, {test['model']}")
+                launch_vllm(test, conf['numa'], conf['containers'], embed=args.embed, gpu=args.gpu, trace=args.trace)
+                if last_failure != i:
+                    last_failure = i
+                    # TODO: do we want to rerun this token_comb? Might cause dead circle
+                else:
+                    i += 1
+            continue
         if results and 'p90_e2el_ms' in results and 'request_throughput' in results:
             token_comb['p90_query_lat'] = results['p90_e2el_ms']
             token_comb['p90_query_tput'] = results['request_throughput']
+        i = i + 1
 
 
 def sweep(test, conf):
@@ -453,7 +473,7 @@ def main(args):
         if args.embed and args.sweep:
             sweep_embed(test, conf)
         elif args.embed and args.benchmark:
-            benchmark_embed(test, conf)
+            benchmark_embed(test, conf, args)
         elif args.benchmark:
             benchmark(test, conf)
         elif args.sweep:
