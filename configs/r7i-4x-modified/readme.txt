@@ -1,0 +1,1 @@
+Run this config on a r7i-8x to mimic a r7i-4x setup but has extra vcpu for client.
