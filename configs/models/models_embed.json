@@ -400,56 +400,6 @@
         }
     },
     {
-        "model": "Linq-AI-Research/Linq-Embed-Mistral",
-        "dtype": "bfloat16",
-        "test_parameters": {
-            "max_tokens": 32768,
-            "embedding_dimension": 4096,
-            "num_parameters": "7B",
-            "mem_usage(MB)": 13563,
-            "mteb_rank": 2,
-            "kv_cache": 0,
-            "benchmark_tests": [
-                {
-                    "inp_tokens": 128,
-                    "concurrency": 1
-                },
-                {
-                    "inp_tokens": 128,
-                    "concurrency": 10
-                },
-                {
-                    "inp_tokens": 128,
-                    "concurrency": 100
-                },
-                {
-                    "inp_tokens": 256,
-                    "concurrency": 1
-                },
-                {
-                    "inp_tokens": 256,
-                    "concurrency": 10
-                },
-                {
-                    "inp_tokens": 256,
-                    "concurrency": 100
-                },
-                {
-                    "inp_tokens": 512,
-                    "concurrency": 1
-                },
-                {
-                    "inp_tokens": 512,
-                    "concurrency": 10
-                },
-                {
-                    "inp_tokens": 512,
-                    "concurrency": 100
-                }
-            ]
-        }
-    },
-    {
         "model": "HIT-TMG/KaLM-embedding-multilingual-mini-v1",
         "dtype": "bfloat16",
         "test_parameters": {
