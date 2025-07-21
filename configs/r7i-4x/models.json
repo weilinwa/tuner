@@ -1,0 +1,221 @@
+[
+    
+    {
+        "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "kv_cache": 32,            
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "op_tokens": 300,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "op_tokens": 1000,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 10000,
+                    "op_tokens": 1500,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 100000,
+                    "op_tokens": 2000,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "op_tokens": 1000,
+                    "concurrency": 10
+                }
+            ]
+        }
+    },
+    {
+        "model": "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "kv_cache": 64,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "op_tokens": 300,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "op_tokens": 1000,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 10000,
+                    "op_tokens": 1500,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 100000,
+                    "op_tokens": 2000,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "op_tokens": 1000,
+                    "concurrency": 10
+                }
+            ]
+        }
+    },
+    {
+        "model": "meta-llama/Llama-2-13b-chat-hf",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "kv_cache": 192,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "op_tokens": 300,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "op_tokens": 1000,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "op_tokens": 1000,
+                    "concurrency": 10
+                }
+            ]
+        }
+    },
+    {
+        "model": "meta-llama/Llama-2-7b-chat-hf",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "kv_cache": 128,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "op_tokens": 300,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "op_tokens": 1000,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "op_tokens": 1000,
+                    "concurrency": 10
+                }
+            ]
+        }
+    },
+    {
+        "model": "meta-llama/Llama-3.1-8B-Instruct",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "kv_cache": 128,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "op_tokens": 300,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "op_tokens": 1000,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 10000,
+                    "op_tokens": 1500,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 100000,
+                    "op_tokens": 2000,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "op_tokens": 1000,
+                    "concurrency": 10
+                }
+            ]
+        }
+    },
+    {
+        "model": "meta-llama/Llama-3.2-1B",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "kv_cache": 32,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "op_tokens": 300,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "op_tokens": 1000,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 10000,
+                    "op_tokens": 1500,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 100000,
+                    "op_tokens": 2000,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "op_tokens": 1000,
+                    "concurrency": 10
+                }
+            ]
+        }
+    },
+    {
+        "model": "meta-llama/Llama-3.2-3B-Instruct",
+        "dtype": "bfloat16",
+        "test_parameters": {
+            "kv_cache": 64,
+            "benchmark_tests": [
+                {
+                    "inp_tokens": 100,
+                    "op_tokens": 300,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "op_tokens": 1000,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 10000,
+                    "op_tokens": 1500,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 100000,
+                    "op_tokens": 2000,
+                    "concurrency": 1
+                },
+                {
+                    "inp_tokens": 1000,
+                    "op_tokens": 1000,
+                    "concurrency": 10
+                }
+            ]
+        }
+    }
+]
